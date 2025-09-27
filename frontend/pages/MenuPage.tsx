@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import PastaBuilder from '../components/PastaBuilder';
 import MenuCategories from '../components/MenuCategories';
+import CartSummary from '../components/CartSummary';
 
 function ErrorFallback({ error }: { error: Error }) {
   return (
@@ -32,18 +33,28 @@ export default function MenuPage() {
         </p>
       </div>
 
-      <div className="space-y-8 sm:space-y-10 lg:space-y-12">
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <PastaBuilder />
-          </Suspense>
-        </ErrorBoundary>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="xl:col-span-2 order-2 xl:order-1">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<LoadingSpinner />}>
+              <PastaBuilder />
+            </Suspense>
+          </ErrorBoundary>
 
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <MenuCategories />
-          </Suspense>
-        </ErrorBoundary>
+          <div className="mt-8 sm:mt-10 lg:mt-12">
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<LoadingSpinner />}>
+                <MenuCategories />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+        </div>
+
+        <div className="xl:col-span-1 order-1 xl:order-2">
+          <div className="sticky top-20 sm:top-24">
+            <CartSummary />
+          </div>
+        </div>
       </div>
     </div>
   );
