@@ -23367,457 +23367,50 @@ function DialogTitle({
     }
   );
 }
-const BROWSER = typeof globalThis === "object" && "window" in globalThis;
-class Client {
-  /**
-   * Creates a Client for calling the public and authenticated APIs of your Encore application.
-   *
-   * @param target  The target which the client should be configured to use. See Local and Environment for options.
-   * @param options Options for the client
-   */
-  constructor(target, options) {
-    this.target = target;
-    this.options = options ?? {};
-    const base = new BaseClient(this.target, this.options);
-    this.auth = new auth.ServiceClient(base);
-    this.menu = new menu.ServiceClient(base);
-    this.orders = new orders.ServiceClient(base);
+const API_BASE_URL = "http://localhost:4000";
+class ApiClient {
+  constructor(baseURL = API_BASE_URL) {
+    this.baseURL = baseURL;
   }
-  /**
-   * Creates a new Encore client with the given client options set.
-   *
-   * @param options Client options to set. They are merged with existing options.
-   **/
-  with(options) {
-    return new Client(this.target, {
-      ...this.options,
+  async request(endpoint, options = {}) {
+    const url = `${this.baseURL}${endpoint}`;
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers
+      },
       ...options
     });
-  }
-}
-var auth;
-((auth2) => {
-  class ServiceClient {
-    constructor(baseClient) {
-      this.baseClient = baseClient;
-      this.login = this.login.bind(this);
-      this.logout = this.logout.bind(this);
-      this.me = this.me.bind(this);
-    }
-    async login(params) {
-      const resp = await this.baseClient.callTypedAPI(`/auth/login`, { method: "POST", body: JSON.stringify(params) });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-    async logout() {
-      const resp = await this.baseClient.callTypedAPI(`/auth/logout`, { method: "POST", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-    async me() {
-      const resp = await this.baseClient.callTypedAPI(`/auth/me`, { method: "GET", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-  }
-  auth2.ServiceClient = ServiceClient;
-})(auth || (auth = {}));
-var menu;
-((menu2) => {
-  class ServiceClient {
-    constructor(baseClient) {
-      this.baseClient = baseClient;
-      this.listIngredients = this.listIngredients.bind(this);
-      this.listPastaTypes = this.listPastaTypes.bind(this);
-      this.listSauces = this.listSauces.bind(this);
-    }
-    /**
-     * Retrieves all available ingredients, optionally filtered by category.
-     */
-    async listIngredients(params) {
-      const query = makeRecord({
-        category: params.category
-      });
-      const resp = await this.baseClient.callTypedAPI(`/ingredients`, { query, method: "GET", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-    /**
-     * Retrieves all available pasta types.
-     */
-    async listPastaTypes() {
-      const resp = await this.baseClient.callTypedAPI(`/pasta-types`, { method: "GET", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-    /**
-     * Retrieves all available sauces.
-     */
-    async listSauces() {
-      const resp = await this.baseClient.callTypedAPI(`/sauces`, { method: "GET", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-  }
-  menu2.ServiceClient = ServiceClient;
-})(menu || (menu = {}));
-var orders;
-((orders2) => {
-  class ServiceClient {
-    constructor(baseClient) {
-      this.baseClient = baseClient;
-      this.createOrder = this.createOrder.bind(this);
-      this.getOrder = this.getOrder.bind(this);
-    }
-    /**
-     * Creates a new order with pasta items and ingredients.
-     */
-    async createOrder(params) {
-      const resp = await this.baseClient.callTypedAPI(`/orders`, { method: "POST", body: JSON.stringify(params) });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-    /**
-     * Retrieves a specific order with all its items and ingredients.
-     */
-    async getOrder(params) {
-      const resp = await this.baseClient.callTypedAPI(`/orders/${encodeURIComponent(params.id)}`, { method: "GET", body: void 0 });
-      return JSON.parse(await resp.text(), dateReviver);
-    }
-  }
-  orders2.ServiceClient = ServiceClient;
-})(orders || (orders = {}));
-function dateReviver(key, value) {
-  if (typeof value === "string" && value.length >= 10 && value.charCodeAt(0) >= 48 && // '0'
-  value.charCodeAt(0) <= 57) {
-    const parsedDate = new Date(value);
-    if (!isNaN(parsedDate.getTime())) {
-      return parsedDate;
-    }
-  }
-  return value;
-}
-function encodeQuery(parts) {
-  const pairs = [];
-  for (const key in parts) {
-    const val = Array.isArray(parts[key]) ? parts[key] : [parts[key]];
-    for (const v of val) {
-      pairs.push(`${key}=${encodeURIComponent(v)}`);
-    }
-  }
-  return pairs.join("&");
-}
-function makeRecord(record) {
-  for (const key in record) {
-    if (record[key] === void 0) {
-      delete record[key];
-    }
-  }
-  return record;
-}
-function encodeWebSocketHeaders(headers) {
-  const base64encoded = btoa(JSON.stringify(headers)).replaceAll("=", "").replaceAll("+", "-").replaceAll("/", "_");
-  return "encore.dev.headers." + base64encoded;
-}
-class WebSocketConnection {
-  constructor(url, headers) {
-    this.hasUpdateHandlers = [];
-    let protocols = ["encore-ws"];
-    if (headers) {
-      protocols.push(encodeWebSocketHeaders(headers));
-    }
-    this.ws = new WebSocket(url, protocols);
-    this.on("error", () => {
-      this.resolveHasUpdateHandlers();
-    });
-    this.on("close", () => {
-      this.resolveHasUpdateHandlers();
-    });
-  }
-  resolveHasUpdateHandlers() {
-    const handlers = this.hasUpdateHandlers;
-    this.hasUpdateHandlers = [];
-    for (const handler of handlers) {
-      handler();
-    }
-  }
-  async hasUpdate() {
-    await new Promise((resolve) => {
-      this.hasUpdateHandlers.push(() => resolve(null));
-    });
-  }
-  on(type, handler) {
-    this.ws.addEventListener(type, handler);
-  }
-  off(type, handler) {
-    this.ws.removeEventListener(type, handler);
-  }
-  close() {
-    this.ws.close();
-  }
-}
-class StreamInOut {
-  constructor(url, headers) {
-    this.buffer = [];
-    this.socket = new WebSocketConnection(url, headers);
-    this.socket.on("message", (event) => {
-      this.buffer.push(JSON.parse(event.data, dateReviver));
-      this.socket.resolveHasUpdateHandlers();
-    });
-  }
-  close() {
-    this.socket.close();
-  }
-  async send(msg) {
-    if (this.socket.ws.readyState === WebSocket.CONNECTING) {
-      await new Promise((resolve) => {
-        this.socket.ws.addEventListener("open", resolve, { once: true });
-      });
-    }
-    return this.socket.ws.send(JSON.stringify(msg));
-  }
-  async next() {
-    for await (const next of this) return next;
-    return void 0;
-  }
-  async *[Symbol.asyncIterator]() {
-    while (true) {
-      if (this.buffer.length > 0) {
-        yield this.buffer.shift();
-      } else {
-        if (this.socket.ws.readyState === WebSocket.CLOSED) return;
-        await this.socket.hasUpdate();
-      }
-    }
-  }
-}
-class StreamIn {
-  constructor(url, headers) {
-    this.buffer = [];
-    this.socket = new WebSocketConnection(url, headers);
-    this.socket.on("message", (event) => {
-      this.buffer.push(JSON.parse(event.data, dateReviver));
-      this.socket.resolveHasUpdateHandlers();
-    });
-  }
-  close() {
-    this.socket.close();
-  }
-  async next() {
-    for await (const next of this) return next;
-    return void 0;
-  }
-  async *[Symbol.asyncIterator]() {
-    while (true) {
-      if (this.buffer.length > 0) {
-        yield this.buffer.shift();
-      } else {
-        if (this.socket.ws.readyState === WebSocket.CLOSED) return;
-        await this.socket.hasUpdate();
-      }
-    }
-  }
-}
-class StreamOut {
-  constructor(url, headers) {
-    let responseResolver;
-    this.responseValue = new Promise((resolve) => responseResolver = resolve);
-    this.socket = new WebSocketConnection(url, headers);
-    this.socket.on("message", (event) => {
-      responseResolver(JSON.parse(event.data, dateReviver));
-    });
-  }
-  async response() {
-    return this.responseValue;
-  }
-  close() {
-    this.socket.close();
-  }
-  async send(msg) {
-    if (this.socket.ws.readyState === WebSocket.CONNECTING) {
-      await new Promise((resolve) => {
-        this.socket.ws.addEventListener("open", resolve, { once: true });
-      });
-    }
-    return this.socket.ws.send(JSON.stringify(msg));
-  }
-}
-const boundFetch = fetch.bind(void 0);
-class BaseClient {
-  constructor(baseURL, options) {
-    this.baseURL = baseURL;
-    this.headers = {};
-    if (!BROWSER) {
-      this.headers["User-Agent"] = "-Generated-TS-Client (Encore/1.50.0)";
-    }
-    this.requestInit = options.requestInit ?? {};
-    if (options.fetcher !== void 0) {
-      this.fetcher = options.fetcher;
-    } else {
-      this.fetcher = boundFetch;
-    }
-    if (options.auth !== void 0) {
-      const auth2 = options.auth;
-      if (typeof auth2 === "function") {
-        this.authGenerator = auth2;
-      } else {
-        this.authGenerator = () => auth2;
-      }
-    }
-  }
-  async getAuthData() {
-    let authData;
-    if (this.authGenerator) {
-      const mayBePromise = this.authGenerator();
-      if (mayBePromise instanceof Promise) {
-        authData = await mayBePromise;
-      } else {
-        authData = mayBePromise;
-      }
-    }
-    if (authData) {
-      const data = {};
-      data.headers = makeRecord({
-        authorization: authData.authorization
-      });
-      return data;
-    }
-    return void 0;
-  }
-  // createStreamInOut sets up a stream to a streaming API endpoint.
-  async createStreamInOut(path, params) {
-    let { query, headers } = params ?? {};
-    const authData = await this.getAuthData();
-    if (authData) {
-      if (authData.query) {
-        query = { ...query, ...authData.query };
-      }
-      if (authData.headers) {
-        headers = { ...headers, ...authData.headers };
-      }
-    }
-    const queryString = query ? "?" + encodeQuery(query) : "";
-    return new StreamInOut(this.baseURL + path + queryString, headers);
-  }
-  // createStreamIn sets up a stream to a streaming API endpoint.
-  async createStreamIn(path, params) {
-    let { query, headers } = params ?? {};
-    const authData = await this.getAuthData();
-    if (authData) {
-      if (authData.query) {
-        query = { ...query, ...authData.query };
-      }
-      if (authData.headers) {
-        headers = { ...headers, ...authData.headers };
-      }
-    }
-    const queryString = query ? "?" + encodeQuery(query) : "";
-    return new StreamIn(this.baseURL + path + queryString, headers);
-  }
-  // createStreamOut sets up a stream to a streaming API endpoint.
-  async createStreamOut(path, params) {
-    let { query, headers } = params ?? {};
-    const authData = await this.getAuthData();
-    if (authData) {
-      if (authData.query) {
-        query = { ...query, ...authData.query };
-      }
-      if (authData.headers) {
-        headers = { ...headers, ...authData.headers };
-      }
-    }
-    const queryString = query ? "?" + encodeQuery(query) : "";
-    return new StreamOut(this.baseURL + path + queryString, headers);
-  }
-  // callTypedAPI makes an API call, defaulting content type to "application/json"
-  async callTypedAPI(path, params) {
-    return this.callAPI(path, {
-      ...params,
-      headers: { "Content-Type": "application/json", ...params == null ? void 0 : params.headers }
-    });
-  }
-  // callAPI is used by each generated API method to actually make the request
-  async callAPI(path, params) {
-    let { query, headers, ...rest } = params ?? {};
-    const init = {
-      ...this.requestInit,
-      ...rest
-    };
-    init.headers = { ...this.headers, ...init.headers, ...headers };
-    const authData = await this.getAuthData();
-    if (authData) {
-      if (authData.query) {
-        query = { ...query, ...authData.query };
-      }
-      if (authData.headers) {
-        init.headers = { ...init.headers, ...authData.headers };
-      }
-    }
-    const queryString = query ? "?" + encodeQuery(query) : "";
-    const response = await this.fetcher(this.baseURL + path + queryString, init);
     if (!response.ok) {
-      let body = { code: "unknown", message: `request failed: status ${response.status}` };
-      try {
-        const text = await response.text();
-        try {
-          const jsonBody = JSON.parse(text);
-          if (isAPIErrorResponse(jsonBody)) {
-            body = jsonBody;
-          } else {
-            body.message += ": " + JSON.stringify(jsonBody);
-          }
-        } catch {
-          body.message += ": " + text;
-        }
-      } catch (e) {
-        body.message += ": " + String(e);
-      }
-      throw new APIError(response.status, body);
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
-    return response;
+    return response.json();
   }
-}
-function isAPIErrorResponse(err) {
-  return err !== void 0 && err !== null && isErrCode(err.code) && typeof err.message === "string" && (err.details === void 0 || err.details === null || typeof err.details === "object");
-}
-function isErrCode(code) {
-  return code !== void 0 && Object.values(ErrCode).includes(code);
-}
-class APIError extends Error {
-  constructor(status, response) {
-    super(response.message);
-    Object.defineProperty(this, "name", {
-      value: "APIError",
-      enumerable: false,
-      configurable: true
+  // Pasta Types API
+  async getPastaTypes() {
+    return this.request("/pasta-types");
+  }
+  // Sauces API
+  async getSauces() {
+    return this.request("/sauces");
+  }
+  // Ingredients API
+  async getIngredients(category) {
+    const params = category ? `?category=${encodeURIComponent(category)}` : "";
+    return this.request(`/ingredients${params}`);
+  }
+  // Orders API
+  async createOrder(orderData) {
+    return this.request("/orders", {
+      method: "POST",
+      body: JSON.stringify(orderData)
     });
-    if (Object.setPrototypeOf == void 0) {
-      this.__proto__ = APIError.prototype;
-    } else {
-      Object.setPrototypeOf(this, APIError.prototype);
-    }
-    if (Error.captureStackTrace !== void 0) {
-      Error.captureStackTrace(this, this.constructor);
-    }
-    this.status = status;
-    this.code = response.code;
-    this.details = response.details;
+  }
+  async getOrder(id) {
+    return this.request(`/orders/${id}`);
   }
 }
-var ErrCode = /* @__PURE__ */ ((ErrCode2) => {
-  ErrCode2["OK"] = "ok";
-  ErrCode2["Canceled"] = "canceled";
-  ErrCode2["Unknown"] = "unknown";
-  ErrCode2["InvalidArgument"] = "invalid_argument";
-  ErrCode2["DeadlineExceeded"] = "deadline_exceeded";
-  ErrCode2["NotFound"] = "not_found";
-  ErrCode2["AlreadyExists"] = "already_exists";
-  ErrCode2["PermissionDenied"] = "permission_denied";
-  ErrCode2["ResourceExhausted"] = "resource_exhausted";
-  ErrCode2["FailedPrecondition"] = "failed_precondition";
-  ErrCode2["Aborted"] = "aborted";
-  ErrCode2["OutOfRange"] = "out_of_range";
-  ErrCode2["Unimplemented"] = "unimplemented";
-  ErrCode2["Internal"] = "internal";
-  ErrCode2["Unavailable"] = "unavailable";
-  ErrCode2["DataLoss"] = "data_loss";
-  ErrCode2["Unauthenticated"] = "unauthenticated";
-  return ErrCode2;
-})(ErrCode || {});
-const backend = new Client("http://localhost:4000", { requestInit: { credentials: "include" } });
+const backend = new ApiClient();
 function Input({ className, type, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "input",
