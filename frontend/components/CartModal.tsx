@@ -223,7 +223,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
                 onClick={() => setIsDeliveryOpen(true)}
               >
                 <Truck className="w-5 h-5 mr-2" />
-                Finalizar Pedido - Delivery
+                Finalizar Pedido
               </Button>
               <Button 
                 variant="outline"
