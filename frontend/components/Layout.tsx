@@ -31,23 +31,23 @@ export default function Layout({ children }: LayoutProps) {
                 to="/" 
                 className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium"
               >
-                Menu
+                Cardápio
               </Link>
               <Link 
                 to="/about" 
                 className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium"
               >
-                About
+                Sobre
               </Link>
               <Link 
                 to="/contact" 
                 className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium"
               >
-                Contact
+                Contato
               </Link>
               <Button variant="outline" className="relative">
                 <ShoppingCart className="w-4 h-4 mr-2" />
-                Cart
+                Carrinho
                 {itemCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {itemCount}
@@ -84,21 +84,21 @@ export default function Layout({ children }: LayoutProps) {
                   className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-4 py-2 rounded-lg hover:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Menu
+                  Cardápio
                 </Link>
                 <Link 
                   to="/about" 
                   className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-4 py-2 rounded-lg hover:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  About
+                  Sobre
                 </Link>
                 <Link 
                   to="/contact" 
                   className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-4 py-2 rounded-lg hover:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Contact
+                  Contato
                 </Link>
               </nav>
             </div>
@@ -121,29 +121,29 @@ export default function Layout({ children }: LayoutProps) {
                 <span className="text-xl font-bold">Fetuccine</span>
               </div>
               <p className="text-gray-400">
-                Authentic Italian pasta, made fresh daily with the finest ingredients.
+                Massas italianas autênticas, feitas frescas diariamente com os melhores ingredientes.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
+              <h3 className="text-lg font-semibold mb-4">Informações de Contato</h3>
               <div className="space-y-2 text-gray-400">
-                <p>123 Pasta Street</p>
-                <p>Little Italy, NY 10012</p>
-                <p>Phone: (555) 123-4567</p>
+                <p>Rua das Massas, 123</p>
+                <p>Centro, São Paulo - SP</p>
+                <p>Telefone: (11) 1234-5678</p>
                 <p>Email: info@fetuccine.com</p>
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Hours</h3>
+              <h3 className="text-lg font-semibold mb-4">Horários</h3>
               <div className="space-y-2 text-gray-400">
-                <p>Monday - Thursday: 11am - 10pm</p>
-                <p>Friday - Saturday: 11am - 11pm</p>
-                <p>Sunday: 12pm - 9pm</p>
+                <p>Segunda - Quinta: 11h - 22h</p>
+                <p>Sexta - Sábado: 11h - 23h</p>
+                <p>Domingo: 12h - 21h</p>
               </div>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Fetuccine Restaurant. All rights reserved.</p>
+            <p>&copy; 2024 Restaurante Fetuccine. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

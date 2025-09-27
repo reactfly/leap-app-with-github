@@ -37,15 +37,15 @@ export default function CartSummary() {
       setCustomerInfo({ name: '', email: '', phone: '' });
       navigate(`/order/${order.id}`);
       toast({
-        title: "Order placed successfully!",
-        description: `Order #${order.id} has been created.`,
+        title: "Pedido realizado com sucesso!",
+        description: `Pedido #${order.id} foi criado.`,
       });
     },
     onError: (error) => {
       console.error('Order creation failed:', error);
       toast({
-        title: "Error",
-        description: "Failed to place order. Please try again.",
+        title: "Erro",
+        description: "Falha ao realizar o pedido. Tente novamente.",
         variant: "destructive",
       });
     },
@@ -56,8 +56,8 @@ export default function CartSummary() {
     
     if (!customerInfo.name.trim()) {
       toast({
-        title: "Error",
-        description: "Please enter your name.",
+        title: "Erro",
+        description: "Por favor, digite seu nome.",
         variant: "destructive",
       });
       return;
@@ -84,14 +84,14 @@ export default function CartSummary() {
         <CardHeader>
           <CardTitle className="flex items-center">
             <ShoppingCart className="w-5 h-5 mr-2" />
-            Your Cart
+            Seu Carrinho
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
             <ShoppingCart className="w-12 h-12 mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500">Your cart is empty</p>
-            <p className="text-sm text-gray-400 mt-2">Start building your perfect pasta!</p>
+            <p className="text-gray-500">Seu carrinho está vazio</p>
+            <p className="text-sm text-gray-400 mt-2">Comece a montar sua massa perfeita!</p>
           </div>
         </CardContent>
       </Card>
@@ -104,10 +104,10 @@ export default function CartSummary() {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center">
             <ShoppingCart className="w-5 h-5 mr-2" />
-            Your Cart
+            Seu Carrinho
           </div>
           <span className="text-sm font-normal text-gray-500">
-            {items.reduce((sum, item) => sum + item.quantity, 0)} items
+            {items.reduce((sum, item) => sum + item.quantity, 0)} itens
           </span>
         </CardTitle>
       </CardHeader>
@@ -122,10 +122,10 @@ export default function CartSummary() {
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <h4 className="font-semibold">{item.pasta_type.name}</h4>
-                    <p className="text-sm text-gray-600">with {item.sauce.name} sauce</p>
+                    <p className="text-sm text-gray-600">com molho {item.sauce.name}</p>
                     {item.ingredients.length > 0 && (
                       <div className="mt-2">
-                        <p className="text-xs text-gray-500 mb-1">Ingredients:</p>
+                        <p className="text-xs text-gray-500 mb-1">Ingredientes:</p>
                         <div className="flex flex-wrap gap-1">
                           {item.ingredients.map((ing, ingIndex) => (
                             <span 
@@ -168,7 +168,7 @@ export default function CartSummary() {
                       <Plus className="w-3 h-3" />
                     </Button>
                   </div>
-                  <span className="font-bold">${(itemPrice * item.quantity).toFixed(2)}</span>
+                  <span className="font-bold">R$ {(itemPrice * item.quantity).toFixed(2)}</span>
                 </div>
               </div>
             );
@@ -178,28 +178,28 @@ export default function CartSummary() {
         <div className="border-t pt-4 mt-6">
           <div className="flex justify-between items-center text-xl font-bold">
             <span>Total:</span>
-            <span className="text-orange-500">${totalPrice.toFixed(2)}</span>
+            <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
           </div>
         </div>
 
         <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
           <DialogTrigger asChild>
             <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600">
-              Checkout
+              Finalizar Pedido
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Complete Your Order</DialogTitle>
+              <DialogTitle>Complete Seu Pedido</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleCheckout} className="space-y-4">
               <div>
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">Nome *</Label>
                 <Input
                   id="name"
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter your name"
+                  placeholder="Digite seu nome"
                   required
                 />
               </div>
@@ -210,24 +210,24 @@ export default function CartSummary() {
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="Enter your email (optional)"
+                  placeholder="Digite seu email (opcional)"
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Telefone</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  placeholder="Enter your phone number (optional)"
+                  placeholder="Digite seu telefone (opcional)"
                 />
               </div>
               
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total:</span>
-                  <span className="text-orange-500">${totalPrice.toFixed(2)}</span>
+                  <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -236,7 +236,7 @@ export default function CartSummary() {
                 className="w-full bg-orange-500 hover:bg-orange-600"
                 disabled={createOrderMutation.isPending}
               >
-                {createOrderMutation.isPending ? 'Placing Order...' : 'Place Order'}
+                {createOrderMutation.isPending ? 'Realizando Pedido...' : 'Realizar Pedido'}
               </Button>
             </form>
           </DialogContent>

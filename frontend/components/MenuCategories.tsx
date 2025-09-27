@@ -48,39 +48,39 @@ export default function MenuCategories() {
     });
 
     toast({
-      title: "Added to cart!",
-      description: `${pasta.name} with ${sauce.name} sauce`,
+      title: "Adicionado ao carrinho!",
+      description: `${pasta.name} com molho ${sauce.name}`,
     });
   };
 
   const categories = [
     {
       id: 'pasta',
-      title: 'Pasta Types',
+      title: 'Tipos de Massa',
       items: pastaTypes?.pasta_types || [],
       type: 'pasta' as const,
     },
     {
       id: 'sauces',
-      title: 'Sauces',
+      title: 'Molhos',
       items: sauces?.sauces || [],
       type: 'sauce' as const,
     },
     {
       id: 'proteins',
-      title: 'Proteins',
+      title: 'Proteínas',
       items: ingredients?.ingredients.filter(i => i.category === 'protein') || [],
       type: 'ingredient' as const,
     },
     {
       id: 'vegetables',
-      title: 'Vegetables',
+      title: 'Vegetais',
       items: ingredients?.ingredients.filter(i => i.category === 'vegetable') || [],
       type: 'ingredient' as const,
     },
     {
       id: 'cheese',
-      title: 'Cheese',
+      title: 'Queijos',
       items: ingredients?.ingredients.filter(i => i.category === 'cheese') || [],
       type: 'ingredient' as const,
     },
@@ -88,7 +88,7 @@ export default function MenuCategories() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-gray-800 text-center">Our Menu</h2>
+      <h2 className="text-3xl font-bold text-gray-800 text-center">Nosso Cardápio</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {categories.map((category) => (
@@ -120,7 +120,7 @@ export default function MenuCategories() {
                           {item.description && (
                             <p className="text-sm text-gray-600 mt-1">{item.description}</p>
                           )}
-                          <p className="text-orange-500 font-bold mt-2">${item.price.toFixed(2)}</p>
+                          <p className="text-orange-500 font-bold mt-2">R$ {item.price.toFixed(2)}</p>
                         </div>
                         
                         {category.type === 'pasta' && sauces?.sauces && (

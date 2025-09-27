@@ -42,8 +42,8 @@ export default function OrderPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Order not found</h2>
-          <p className="text-gray-600">The order you're looking for doesn't exist.</p>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Pedido não encontrado</h2>
+          <p className="text-gray-600">O pedido que você está procurando não existe.</p>
         </div>
       </div>
     );
@@ -60,37 +60,37 @@ export default function OrderPage() {
             <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4`}>
               <StatusIcon className={`w-8 h-8 ${statusColor}`} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Order #{order.id}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Pedido #{order.id}</h1>
             <p className="text-gray-600 capitalize">Status: <span className={`font-semibold ${statusColor}`}>{order.status}</span></p>
           </div>
 
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Customer Information</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Informações do Cliente</h2>
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <p><span className="font-medium">Name:</span> {order.customer_name}</p>
+                <p><span className="font-medium">Nome:</span> {order.customer_name}</p>
                 {order.customer_email && (
                   <p><span className="font-medium">Email:</span> {order.customer_email}</p>
                 )}
                 {order.customer_phone && (
-                  <p><span className="font-medium">Phone:</span> {order.customer_phone}</p>
+                  <p><span className="font-medium">Telefone:</span> {order.customer_phone}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Order Items</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Itens do Pedido</h2>
               <div className="space-y-4">
                 {order.items.map((item) => (
                   <div key={item.id} className="bg-gray-50 rounded-lg p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-lg">{item.pasta_type_name} with {item.sauce_name}</h3>
-                      <span className="text-lg font-bold">${item.item_price.toFixed(2)}</span>
+                      <h3 className="font-semibold text-lg">{item.pasta_type_name} com {item.sauce_name}</h3>
+                      <span className="text-lg font-bold">R$ {item.item_price.toFixed(2)}</span>
                     </div>
-                    <p className="text-gray-600 mb-2">Quantity: {item.quantity}</p>
+                    <p className="text-gray-600 mb-2">Quantidade: {item.quantity}</p>
                     {item.ingredients.length > 0 && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-1">Ingredients:</p>
+                        <p className="text-sm font-medium text-gray-700 mb-1">Ingredientes:</p>
                         <div className="flex flex-wrap gap-2">
                           {item.ingredients.map((ingredient, index) => (
                             <span 
@@ -111,10 +111,10 @@ export default function OrderPage() {
             <div className="border-t pt-6">
               <div className="flex justify-between items-center text-xl font-bold">
                 <span>Total:</span>
-                <span className="text-orange-500">${order.total_price.toFixed(2)}</span>
+                <span className="text-orange-500">R$ {order.total_price.toFixed(2)}</span>
               </div>
               <p className="text-gray-500 text-sm mt-2">
-                Order placed on {new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}
+                Pedido realizado em {new Date(order.created_at).toLocaleDateString('pt-BR')} às {new Date(order.created_at).toLocaleTimeString('pt-BR')}
               </p>
             </div>
           </div>

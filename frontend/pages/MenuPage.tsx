@@ -7,7 +7,7 @@ import CartSummary from '../components/CartSummary';
 function ErrorFallback({ error }: { error: Error }) {
   return (
     <div className="text-center py-12">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
+      <h2 className="text-2xl font-bold text-red-600 mb-4">Algo deu errado</h2>
       <p className="text-gray-600">{error.message}</p>
     </div>
   );
@@ -26,10 +26,10 @@ export default function MenuPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
-          Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Fetuccine</span>
+          Bem-vindo ao <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Fetuccine</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Create your perfect pasta dish with our interactive builder. Choose your pasta, sauce, and ingredients for a meal made just for you.
+          Crie seu prato de massa perfeito com nosso construtor interativo. Escolha sua massa, molho e ingredientes para uma refeição feita especialmente para você.
         </p>
       </div>
 

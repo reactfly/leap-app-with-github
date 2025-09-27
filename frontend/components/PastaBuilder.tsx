@@ -55,8 +55,8 @@ export default function PastaBuilder() {
     });
 
     toast({
-      title: "Added to cart!",
-      description: `${selectedPasta.name} with ${selectedSauce.name} sauce`,
+      title: "Adicionado ao carrinho!",
+      description: `${selectedPasta.name} com molho ${selectedSauce.name}`,
     });
 
     // Reset builder
@@ -70,15 +70,15 @@ export default function PastaBuilder() {
     selectedIngredients.reduce((sum, ing) => sum + ing.price, 0);
 
   const steps = [
-    { number: 1, title: 'Choose Pasta', completed: !!selectedPasta },
-    { number: 2, title: 'Choose Sauce', completed: !!selectedSauce },
-    { number: 3, title: 'Add Ingredients', completed: step >= 3 },
+    { number: 1, title: 'Escolher Massa', completed: !!selectedPasta },
+    { number: 2, title: 'Escolher Molho', completed: !!selectedSauce },
+    { number: 3, title: 'Adicionar Ingredientes', completed: step >= 3 },
   ];
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-2xl text-center">Build Your Perfect Pasta</CardTitle>
+        <CardTitle className="text-2xl text-center">Monte Sua Massa Perfeita</CardTitle>
         
         <div className="flex justify-between items-center mt-6">
           {steps.map((stepItem, index) => (
@@ -110,7 +110,7 @@ export default function PastaBuilder() {
       <CardContent>
         {step === 1 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Choose your pasta type</h3>
+            <h3 className="text-lg font-semibold">Escolha seu tipo de massa</h3>
             {loadingPasta ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, i) => (
@@ -132,7 +132,7 @@ export default function PastaBuilder() {
                     <div className="text-center">
                       <h4 className="font-semibold text-lg">{pasta.name}</h4>
                       <p className="text-sm text-gray-600 mt-1">{pasta.description}</p>
-                      <p className="text-orange-500 font-bold mt-2">${pasta.price.toFixed(2)}</p>
+                      <p className="text-orange-500 font-bold mt-2">R$ {pasta.price.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -141,7 +141,7 @@ export default function PastaBuilder() {
             {selectedPasta && (
               <div className="flex justify-end mt-6">
                 <Button onClick={() => setStep(2)} className="bg-orange-500 hover:bg-orange-600">
-                  Next: Choose Sauce
+                  Próximo: Escolher Molho
                 </Button>
               </div>
             )}
@@ -151,9 +151,9 @@ export default function PastaBuilder() {
         {step === 2 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Choose your sauce</h3>
+              <h3 className="text-lg font-semibold">Escolha seu molho</h3>
               <Button variant="outline" onClick={() => setStep(1)}>
-                Back
+                Voltar
               </Button>
             </div>
             {loadingSauces ? (
@@ -177,7 +177,7 @@ export default function PastaBuilder() {
                     <div className="text-center">
                       <h4 className="font-semibold text-lg">{sauce.name}</h4>
                       <p className="text-sm text-gray-600 mt-1">{sauce.description}</p>
-                      <p className="text-orange-500 font-bold mt-2">${sauce.price.toFixed(2)}</p>
+                      <p className="text-orange-500 font-bold mt-2">R$ {sauce.price.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -186,7 +186,7 @@ export default function PastaBuilder() {
             {selectedSauce && (
               <div className="flex justify-end mt-6">
                 <Button onClick={() => setStep(3)} className="bg-orange-500 hover:bg-orange-600">
-                  Next: Add Ingredients
+                  Próximo: Adicionar Ingredientes
                 </Button>
               </div>
             )}
@@ -196,9 +196,9 @@ export default function PastaBuilder() {
         {step === 3 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Add ingredients (optional)</h3>
+              <h3 className="text-lg font-semibold">Adicionar ingredientes (opcional)</h3>
               <Button variant="outline" onClick={() => setStep(2)}>
-                Back
+                Voltar
               </Button>
             </div>
             
@@ -214,7 +214,11 @@ export default function PastaBuilder() {
                   const categoryIngredients = ingredients?.ingredients.filter(ing => ing.category === category) || [];
                   return (
                     <div key={category}>
-                      <h4 className="font-medium text-gray-700 mb-3 capitalize">{category}s</h4>
+                      <h4 className="font-medium text-gray-700 mb-3 capitalize">
+                        {category === 'protein' ? 'Proteínas' : 
+                         category === 'vegetable' ? 'Vegetais' : 
+                         category === 'cheese' ? 'Queijos' : category}s
+                      </h4>
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {categoryIngredients.map((ingredient) => (
                           <div
@@ -235,7 +239,7 @@ export default function PastaBuilder() {
                                 <Plus className="w-4 h-4" />
                               </div>
                               <h5 className="font-medium text-sm">{ingredient.name}</h5>
-                              <p className="text-orange-500 font-bold text-sm">${ingredient.price.toFixed(2)}</p>
+                              <p className="text-orange-500 font-bold text-sm">R$ {ingredient.price.toFixed(2)}</p>
                             </div>
                           </div>
                         ))}
@@ -249,18 +253,18 @@ export default function PastaBuilder() {
             <div className="border-t pt-6 mt-8">
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h4 className="font-semibold text-lg">Your Pasta</h4>
+                  <h4 className="font-semibold text-lg">Sua Massa</h4>
                   <p className="text-gray-600">
-                    {selectedPasta?.name} with {selectedSauce?.name}
+                    {selectedPasta?.name} com {selectedSauce?.name}
                     {selectedIngredients.length > 0 && (
-                      <span> + {selectedIngredients.length} ingredient{selectedIngredients.length !== 1 ? 's' : ''}</span>
+                      <span> + {selectedIngredients.length} ingrediente{selectedIngredients.length !== 1 ? 's' : ''}</span>
                     )}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-orange-500">${totalPrice.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-orange-500">R$ {totalPrice.toFixed(2)}</p>
                   <Button onClick={addToCart} className="mt-2 bg-orange-500 hover:bg-orange-600">
-                    Add to Cart
+                    Adicionar ao Carrinho
                   </Button>
                 </div>
               </div>
