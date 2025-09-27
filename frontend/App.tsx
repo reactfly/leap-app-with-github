@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import Layout from './components/Layout';
-import MenuPage from './pages/MenuPage';
+import HomePage from './pages/HomePage';
+import DeliveryMenuPage from './pages/DeliveryMenuPage';
 import OrderPage from './pages/OrderPage';
 import { CartProvider } from './context/CartContext';
 
@@ -21,15 +22,16 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <Router>
-          <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 dark">
-            <Layout>
-              <Routes>
-                <Route path="/" element={<MenuPage />} />
-                <Route path="/order/:id" element={<OrderPage />} />
-              </Routes>
-            </Layout>
-            <Toaster />
-          </div>
+                 <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 dark">
+                   <Layout>
+                     <Routes>
+                       <Route path="/" element={<HomePage />} />
+                       <Route path="/menu" element={<DeliveryMenuPage />} />
+                       <Route path="/order/:id" element={<OrderPage />} />
+                     </Routes>
+                   </Layout>
+                   <Toaster />
+                 </div>
         </Router>
       </CartProvider>
     </QueryClientProvider>
