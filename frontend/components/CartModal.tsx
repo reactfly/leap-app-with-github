@@ -217,26 +217,27 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
               <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="space-y-3">
               <Button 
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-base py-3"
-                onClick={() => setIsCheckoutOpen(true)}
-              >
-                Retirada no Local
-              </Button>
-              <Button 
-                className="flex-1 bg-green-500 hover:bg-green-600 text-base py-3"
+                className="w-full bg-green-500 hover:bg-green-600 text-lg py-4 font-semibold"
                 onClick={() => setIsDeliveryOpen(true)}
               >
-                <Truck className="w-4 h-4 mr-2" />
-                Delivery
+                <Truck className="w-5 h-5 mr-2" />
+                Finalizar Pedido - Delivery
+              </Button>
+              <Button 
+                variant="outline"
+                className="w-full text-sm py-2"
+                onClick={() => setIsCheckoutOpen(true)}
+              >
+                Retirada no Local (Alternativa)
               </Button>
             </div>
             
             <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
               <DialogContent className="max-w-md">
                 <DialogHeader>
-                  <DialogTitle>Complete Seu Pedido</DialogTitle>
+                  <DialogTitle>Retirada no Local - Pedido Alternativo</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleCheckout} className="space-y-4">
                   <div>
