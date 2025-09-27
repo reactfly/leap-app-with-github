@@ -28,25 +28,31 @@ export default function Layout({ children }: LayoutProps) {
               <span className="text-lg sm:text-xl font-bold text-gray-800">Fetuccine</span>
             </Link>
 
-            <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
-              <Link 
-                to="/" 
-                className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
-              >
-                Cardápio
-              </Link>
-              <Link 
-                to="/about" 
-                className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
-              >
-                Sobre
-              </Link>
-              <Link 
-                to="/contact" 
-                className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
-              >
-                Contato
-              </Link>
+                   <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
+                     <Link
+                       to="/"
+                       className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
+                     >
+                       Início
+                     </Link>
+                     <Link
+                       to="/menu"
+                       className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
+                     >
+                       Cardápio
+                     </Link>
+                     <Link
+                       to="/about"
+                       className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
+                     >
+                       Sobre
+                     </Link>
+                     <Link
+                       to="/contact"
+                       className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base"
+                     >
+                       Contato
+                     </Link>
               <Button 
                 variant="outline" 
                 className="relative text-xs lg:text-sm px-2 lg:px-4"
@@ -87,33 +93,40 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {isMenuOpen && (
-            <div className="md:hidden py-3 border-t border-orange-200 bg-white/95 backdrop-blur-sm">
-              <nav className="flex flex-col space-y-2">
-                <Link 
-                  to="/" 
-                  className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Cardápio
-                </Link>
-                <Link 
-                  to="/about" 
-                  className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sobre
-                </Link>
-                <Link 
-                  to="/contact" 
-                  className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Contato
-                </Link>
-              </nav>
-            </div>
-          )}
+                 {isMenuOpen && (
+                   <div className="md:hidden py-3 border-t border-orange-200 bg-white/95 backdrop-blur-sm">
+                     <nav className="flex flex-col space-y-2">
+                       <Link
+                         to="/"
+                         className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
+                         onClick={() => setIsMenuOpen(false)}
+                       >
+                         Início
+                       </Link>
+                       <Link
+                         to="/menu"
+                         className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
+                         onClick={() => setIsMenuOpen(false)}
+                       >
+                         Cardápio
+                       </Link>
+                       <Link
+                         to="/about"
+                         className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
+                         onClick={() => setIsMenuOpen(false)}
+                       >
+                         Sobre
+                       </Link>
+                       <Link
+                         to="/contact"
+                         className="text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm"
+                         onClick={() => setIsMenuOpen(false)}
+                       >
+                         Contato
+                       </Link>
+                     </nav>
+                   </div>
+                 )}
         </div>
       </header>
 
@@ -131,25 +144,27 @@ export default function Layout({ children }: LayoutProps) {
                 </div>
                 <span className="text-lg sm:text-xl font-bold">Fetuccine</span>
               </div>
-              <p className="text-gray-400 text-sm sm:text-base">
-                Massas italianas autênticas, feitas frescas diariamente com os melhores ingredientes.
-              </p>
+                     <p className="text-gray-400 text-sm sm:text-base">
+                       Massas italianas autênticas entregues na sua casa. 
+                       Tradição italiana com a conveniência do delivery moderno.
+                     </p>
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Informações de Contato</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Delivery</h3>
               <div className="space-y-1 sm:space-y-2 text-gray-400 text-sm sm:text-base">
-                <p>Rua das Massas, 123</p>
-                <p>Centro, São Paulo - SP</p>
-                <p>Telefone: (11) 1234-5678</p>
-                <p>Email: info@fetuccine.com</p>
+                <p>Entregamos em toda a região</p>
+                <p>Tempo médio: 25-30 minutos</p>
+                <p>Delivery grátis acima de R$ 30</p>
+                <p>WhatsApp: (11) 98765-4321</p>
               </div>
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Horários</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Horários de Funcionamento</h3>
               <div className="space-y-1 sm:space-y-2 text-gray-400 text-sm sm:text-base">
                 <p>Segunda - Quinta: 11h - 22h</p>
                 <p>Sexta - Sábado: 11h - 23h</p>
                 <p>Domingo: 12h - 21h</p>
+                <p>Delivery até 30 min antes do fechamento</p>
               </div>
             </div>
           </div>
