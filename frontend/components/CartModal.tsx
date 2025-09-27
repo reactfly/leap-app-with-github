@@ -3,6 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Trash2, Plus, Minus, X, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import backend from '~backend/client';
 import { useCart } from '../context/CartContext';
@@ -15,7 +18,13 @@ interface CartModalProps {
 }
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
   
   const { items, removeItem, updateQuantity, clearCart } = useCart();
   const { toast } = useToast();
@@ -31,6 +40,8 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     mutationFn: (orderData: any) => backend.orders.createOrder(orderData),
     onSuccess: (order) => {
       clearCart();
+      setIsCheckoutOpen(false);
+      setCustomerInfo({ name: '', email: '', phone: '' });
       onClose();
       navigate(`/order/${order.id}`);
       toast({
@@ -48,6 +59,32 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     },
   });
 
+  const handleCheckout = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!customerInfo.name.trim()) {
+      toast({
+        title: "Erro",
+        description: "Por favor, digite seu nome.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const orderData = {
+      customer_name: customerInfo.name,
+      customer_email: customerInfo.email || undefined,
+      customer_phone: customerInfo.phone || undefined,
+      items: items.map(item => ({
+        pasta_type_id: item.pasta_type.id,
+        sauce_id: item.sauce.id,
+        ingredient_ids: item.ingredients.map(ing => ing.id),
+        quantity: item.quantity,
+      })),
+    };
+
+    createOrderMutation.mutate(orderData);
+  };
 
   const handleDeliveryConfirm = (deliveryData: DeliveryData) => {
     const orderData = {
@@ -180,13 +217,77 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
               <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
             </div>
 
-            <Button 
-              className="w-full bg-green-500 hover:bg-green-600 text-lg py-4 font-semibold"
-              onClick={() => setIsDeliveryOpen(true)}
-            >
-              <Truck className="w-5 h-5 mr-2" />
-              Finalizar Pedido
-            </Button>
+            <div className="space-y-3">
+              <Button 
+                className="w-full bg-green-500 hover:bg-green-600 text-lg py-4 font-semibold"
+                onClick={() => setIsDeliveryOpen(true)}
+              >
+                <Truck className="w-5 h-5 mr-2" />
+                Finalizar Pedido - Delivery
+              </Button>
+              <Button 
+                variant="outline"
+                className="w-full text-sm py-2"
+                onClick={() => setIsCheckoutOpen(true)}
+              >
+                Retirada no Local (Alternativa)
+              </Button>
+            </div>
+            
+            <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Retirada no Local - Pedido Alternativo</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCheckout} className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Nome *</Label>
+                    <Input
+                      id="name"
+                      value={customerInfo.name}
+                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
+                      placeholder="Digite seu nome"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={customerInfo.email}
+                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="Digite seu email (opcional)"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Telefone</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={customerInfo.phone}
+                      onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
+                      placeholder="Digite seu telefone (opcional)"
+                    />
+                  </div>
+                  
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between items-center text-lg font-bold">
+                      <span>Total:</span>
+                      <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-orange-500 hover:bg-orange-600"
+                    disabled={createOrderMutation.isPending}
+                  >
+                    {createOrderMutation.isPending ? 'Realizando Pedido...' : 'Realizar Pedido'}
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </DialogContent>
       </Dialog>
