@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ShoppingCart, MapPin, Clock } from 'lucide-react';
+import { Menu, X, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+// import { IconWithCounter, ResponsiveIcon } from '@/components/ui/illustrative-icons';
 import { useCart } from '../context/CartContext';
 import CartModal from './CartModal';
 
@@ -58,11 +59,11 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
-                  <MapPin className="w-4 h-4 text-red-500" />
+                  <span className="text-red-500">📍</span>
                   <span>São Paulo, SP</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Clock className="w-4 h-4 text-green-500" />
+                  <span className="text-green-500">⏰</span>
                   <span>25-30 min</span>
                 </div>
               </div>
@@ -72,13 +73,8 @@ export default function Layout({ children }: LayoutProps) {
                 className="relative bg-red-500 text-white hover:bg-red-600 border-red-500"
                 onClick={() => setIsCartOpen(true)}
               >
-                <ShoppingCart className="w-4 h-4 mr-2" />
+                <span className="mr-2">🛒</span>
                 <span className="hidden sm:inline">Carrinho</span>
-                {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-white text-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                    {itemCount}
-                  </span>
-                )}
               </Button>
             </div>
 
@@ -89,12 +85,7 @@ export default function Layout({ children }: LayoutProps) {
                 className="relative bg-red-500 text-white hover:bg-red-600 border-red-500"
                 onClick={() => setIsCartOpen(true)}
               >
-                <ShoppingCart className="w-4 h-4" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-white text-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                    {itemCount}
-                  </span>
-                )}
+                <span>🛒</span>
               </Button>
               <Button
                 variant="ghost"

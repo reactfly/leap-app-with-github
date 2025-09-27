@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import Lightbox from '@/components/ui/lightbox';
 import client from "../client";
 import { useCart } from '../context/CartContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -184,16 +184,13 @@ export default function CartSummary() {
           </div>
         </div>
 
-        <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
-          <DialogTrigger asChild>
-            <Button className="w-full mt-3 sm:mt-4 bg-orange-500 hover:bg-orange-600 text-sm sm:text-base py-2 sm:py-3">
-              Finalizar Pedido
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Complete Seu Pedido</DialogTitle>
-            </DialogHeader>
+        <Lightbox
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          title="Complete Seu Pedido"
+          size="md"
+        >
+          <div className="p-6">
             <form onSubmit={handleCheckout} className="space-y-4">
               <div>
                 <Label htmlFor="name">Nome *</Label>
@@ -241,8 +238,15 @@ export default function CartSummary() {
                 {createOrderMutation.isPending ? 'Realizando Pedido...' : 'Realizar Pedido'}
               </Button>
             </form>
-          </DialogContent>
-        </Dialog>
+          </div>
+        </Lightbox>
+        
+        <Button 
+          className="w-full mt-3 sm:mt-4 bg-orange-500 hover:bg-orange-600 text-sm sm:text-base py-2 sm:py-3"
+          onClick={() => setIsCheckoutOpen(true)}
+        >
+          Finalizar Pedido
+        </Button>
       </CardContent>
     </Card>
   );

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MapPin, Clock, Truck, Star, Search, Filter, Heart, Plus, Minus, ChefHat } from 'lucide-react';
+import { Search, Filter, Heart, Plus, Minus, MapPin, Clock, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import Lightbox from '@/components/ui/lightbox';
+// import { ResponsiveIcon } from '@/components/ui/illustrative-icons';
 import client from '../client';
 import { useCart } from '../context/CartContext';
 import CartModal from '../components/CartModal';
@@ -22,6 +23,7 @@ export default function DeliveryMenuPage() {
     queryKey: ['pasta-types'],
     queryFn: () => client.getPastaTypes(),
   });
+
 
   const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ['sauces'],
@@ -43,8 +45,8 @@ export default function DeliveryMenuPage() {
   const filteredPastaTypes = pastaTypes?.filter(pasta => {
     const matchesSearch = pasta.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          pasta.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || pasta.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    // Como não temos categoria nos dados da API, vamos filtrar apenas por busca
+    return matchesSearch;
   });
 
   const handleAddToCart = (pastaType: any, sauce: any, selectedIngredients: any[]) => {
@@ -163,6 +165,7 @@ export default function DeliveryMenuPage() {
           </div>
         </div>
 
+
         {/* Menu Grid - estilo iFood */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPastaTypes?.map((pastaType) => (
@@ -170,7 +173,7 @@ export default function DeliveryMenuPage() {
               {/* Imagem do prato */}
               <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center relative">
                 <span className="text-6xl">🍝</span>
-                {pastaType.popular && (
+                {(pastaType.id === 1 || pastaType.id === 2) && (
                   <Badge className="absolute top-3 left-3 bg-red-500 text-white">
                     Popular
                   </Badge>
@@ -304,15 +307,22 @@ export default function DeliveryMenuPage() {
         </div>
       </div>
       
-      {/* Monte seu Macarrão Modal */}
-      <Dialog open={isMonteSeuMacarraoOpen} onOpenChange={setIsMonteSeuMacarraoOpen}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">Monte seu Macarrão</DialogTitle>
-          </DialogHeader>
-          <MonteSeuMacarrao onClose={() => setIsMonteSeuMacarraoOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      {/* Monte seu Macarrão Lightbox */}
+      <Lightbox
+        isOpen={isMonteSeuMacarraoOpen}
+        onClose={() => setIsMonteSeuMacarraoOpen(false)}
+        title="Monte seu Macarrão"
+        size="xl"
+        className="max-h-[95vh]"
+        header={
+          <div className="flex items-center text-2xl font-bold text-center">
+            <span className="mr-3 text-red-500 text-2xl">👨‍🍳</span>
+            Monte seu Macarrão
+          </div>
+        }
+      >
+        <MonteSeuMacarrao onClose={() => setIsMonteSeuMacarraoOpen(false)} />
+      </Lightbox>
       
       <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>

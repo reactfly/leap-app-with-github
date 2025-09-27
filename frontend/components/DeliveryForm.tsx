@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Search, Phone, User, Mail, Home, Clock } from 'lucide-react';
+import { Search, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Lightbox from '@/components/ui/lightbox';
+// import { ResponsiveIcon } from '@/components/ui/illustrative-icons';
 import { useToast } from '@/components/ui/use-toast';
 import { buscarCEP, formatarCEP, formatarTelefone, CEPData } from '../utils/cepService';
 
@@ -189,24 +191,25 @@ _Pedido realizado via sistema Fetuccine_`;
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center text-xl">
-            <MapPin className="w-6 h-6 mr-2 text-orange-500" />
-            Delivery Fetuccine
-          </CardTitle>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            ✕
-          </Button>
-        </CardHeader>
-
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+    <Lightbox
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Delivery Fetuccine"
+      size="lg"
+      className="max-h-[90vh]"
+      header={
+        <div className="flex items-center text-xl font-bold">
+          <span className="mr-2 text-orange-500">🚚</span>
+          Delivery Fetuccine
+        </div>
+      }
+    >
+      <div className="p-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
             {/* Dados do Cliente */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center">
-                <User className="w-5 h-5 mr-2 text-orange-500" />
+                <span className="mr-2 text-orange-500">👤</span>
                 Dados do Cliente
               </h3>
               
@@ -443,9 +446,8 @@ _Pedido realizado via sistema Fetuccine_`;
                 Confirmar Pedido
               </Button>
             </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+        </form>
+      </div>
+    </Lightbox>
   );
 }
