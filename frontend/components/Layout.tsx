@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ShoppingCart, LogOut, User } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+import CartModal from './CartModal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,14 +11,10 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { items } = useCart();
-  const { user, logout } = useAuth();
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  const handleLogout = async () => {
-    await logout();
-  };
 
   return (
     <div className="min-h-screen">
@@ -51,25 +47,11 @@ export default function Layout({ children }: LayoutProps) {
               >
                 Contato
               </Link>
-              
-              {user && (
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <User className="w-4 h-4" />
-                    <span>{user.name}</span>
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleLogout}
-                    className="text-gray-600 hover:text-red-600"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </div>
-              )}
-
-              <Button variant="outline" className="relative text-xs lg:text-sm px-2 lg:px-4">
+              <Button 
+                variant="outline" 
+                className="relative text-xs lg:text-sm px-2 lg:px-4"
+                onClick={() => setIsCartOpen(true)}
+              >
                 <ShoppingCart className="w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" />
                 <span className="hidden sm:inline">Carrinho</span>
                 {itemCount > 0 && (
@@ -81,7 +63,12 @@ export default function Layout({ children }: LayoutProps) {
             </nav>
 
             <div className="md:hidden flex items-center space-x-2">
-              <Button variant="outline" size="sm" className="relative p-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="relative p-2"
+                onClick={() => setIsCartOpen(true)}
+              >
                 <ShoppingCart className="w-4 h-4" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
@@ -171,6 +158,8 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
       </footer>
+      
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );
 }
