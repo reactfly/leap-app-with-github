@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import backend from '~backend/client';
+import client from "../client";
 import { useCart } from '../context/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 import type { PastaType } from '~backend/menu/list_pasta_types';
@@ -18,17 +18,17 @@ export default function MenuCategories() {
 
   const { data: pastaTypes } = useQuery({
     queryKey: ['pasta-types'],
-    queryFn: () => backend.menu.listPastaTypes(),
+    queryFn: () => client.menu.listPastaTypes(),
   });
 
   const { data: sauces } = useQuery({
     queryKey: ['sauces'],
-    queryFn: () => backend.menu.listSauces(),
+    queryFn: () => client.menu.listSauces(),
   });
 
   const { data: ingredients } = useQuery({
     queryKey: ['ingredients'],
-    queryFn: () => backend.menu.listIngredients({}),
+    queryFn: () => client.menu.listIngredients({}),
   });
 
   const toggleCategory = (category: string) => {

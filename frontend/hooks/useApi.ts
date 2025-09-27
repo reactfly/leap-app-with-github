@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import backend from '~backend/client';
+import client from '../client';
 
 export function usePastaTypes() {
   return useQuery({
     queryKey: ['pasta-types'],
-    queryFn: () => backend.menu.listPastaTypes(),
+    queryFn: () => client.getPastaTypes(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
@@ -12,7 +12,7 @@ export function usePastaTypes() {
 export function useSauces() {
   return useQuery({
     queryKey: ['sauces'],
-    queryFn: () => backend.menu.listSauces(),
+    queryFn: () => client.getSauces(),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -20,7 +20,7 @@ export function useSauces() {
 export function useIngredients(category?: string) {
   return useQuery({
     queryKey: ['ingredients', category],
-    queryFn: () => backend.menu.listIngredients({ category }),
+    queryFn: () => client.getIngredients(category),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -29,7 +29,7 @@ export function useCreateOrder() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (orderData: any) => backend.orders.createOrder(orderData),
+    mutationFn: (orderData: any) => client.createOrder(orderData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
     },
@@ -39,7 +39,7 @@ export function useCreateOrder() {
 export function useOrder(id: number) {
   return useQuery({
     queryKey: ['order', id],
-    queryFn: () => backend.orders.getOrder({ id }),
+    queryFn: () => client.getOrder(id),
     enabled: !!id,
   });
 }

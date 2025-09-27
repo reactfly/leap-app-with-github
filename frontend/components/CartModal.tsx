@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Trash2, Plus, Minus, X, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import backend from '~backend/client';
+import client from '../client';
 import { useCart } from '../context/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 import DeliveryForm, { DeliveryData } from './DeliveryForm';
@@ -28,7 +28,7 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
   }, 0);
 
   const createOrderMutation = useMutation({
-    mutationFn: (orderData: any) => backend.orders.createOrder(orderData),
+    mutationFn: (orderData: any) => client.createOrder(orderData),
     onSuccess: (order) => {
       clearCart();
       onClose();

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ChevronRight, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import backend from '~backend/client';
+import client from '../client';
 import type { PastaType } from '~backend/menu/list_pasta_types';
 import type { Sauce } from '~backend/menu/list_sauces';
 import type { Ingredient } from '~backend/menu/list_ingredients';
@@ -20,17 +20,17 @@ export default function PastaBuilder() {
 
   const { data: pastaTypes, isLoading: loadingPasta } = useQuery({
     queryKey: ['pasta-types'],
-    queryFn: () => backend.menu.listPastaTypes(),
+    queryFn: () => client.getPastaTypes(),
   });
 
   const { data: sauces, isLoading: loadingSauces } = useQuery({
     queryKey: ['sauces'],
-    queryFn: () => backend.menu.listSauces(),
+    queryFn: () => client.getSauces(),
   });
 
   const { data: ingredients, isLoading: loadingIngredients } = useQuery({
     queryKey: ['ingredients'],
-    queryFn: () => backend.menu.listIngredients({ category: undefined }),
+    queryFn: () => client.getIngredients(),
   });
 
   const handleIngredientToggle = (ingredient: Ingredient) => {

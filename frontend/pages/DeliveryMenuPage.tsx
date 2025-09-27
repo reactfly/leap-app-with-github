@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import backend from '~backend/client';
+import client from '../client';
 import { useCart } from '../context/CartContext';
 import CartModal from '../components/CartModal';
 import MonteSeuMacarrao from '../components/MonteSeuMacarrao';
@@ -20,17 +20,17 @@ export default function DeliveryMenuPage() {
 
   const { data: pastaTypes, isLoading: pastaLoading } = useQuery({
     queryKey: ['pasta-types'],
-    queryFn: () => backend.pastaTypes.list(),
+    queryFn: () => client.getPastaTypes(),
   });
 
   const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ['sauces'],
-    queryFn: () => backend.sauces.list(),
+    queryFn: () => client.getSauces(),
   });
 
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
     queryKey: ['ingredients'],
-    queryFn: () => backend.ingredients.list(),
+    queryFn: () => client.getIngredients(),
   });
 
   const categories = [

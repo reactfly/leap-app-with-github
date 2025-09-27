@@ -579,7 +579,7 @@ const React$1 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
   default: React
 }, [reactExports]);
-var client = { exports: {} };
+var client$1 = { exports: {} };
 var reactDomClient_production = {};
 var scheduler = { exports: {} };
 var scheduler_production = {};
@@ -12100,7 +12100,7 @@ function requireReactDomClient_production() {
 }
 var hasRequiredClient;
 function requireClient() {
-  if (hasRequiredClient) return client.exports;
+  if (hasRequiredClient) return client$1.exports;
   hasRequiredClient = 1;
   function checkDCE() {
     if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") {
@@ -12114,9 +12114,9 @@ function requireClient() {
   }
   {
     checkDCE();
-    client.exports = requireReactDomClient_production();
+    client$1.exports = requireReactDomClient_production();
   }
-  return client.exports;
+  return client$1.exports;
 }
 var clientExports = requireClient();
 const ReactDOM$1 = /* @__PURE__ */ getDefaultExportFromCjs(clientExports);
@@ -23410,7 +23410,7 @@ class ApiClient {
     return this.request(`/orders/${id}`);
   }
 }
-const backend = new ApiClient();
+const client = new ApiClient();
 function Input({ className, type, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "input",
@@ -23969,7 +23969,7 @@ function CartModal({ isOpen, onClose }) {
     return sum + itemPrice * item.quantity;
   }, 0);
   const createOrderMutation = useMutation({
-    mutationFn: (orderData) => backend.orders.createOrder(orderData),
+    mutationFn: (orderData) => client.createOrder(orderData),
     onSuccess: (order) => {
       clearCart();
       onClose();
@@ -24519,15 +24519,15 @@ function MonteSeuMacarrao({ onClose }) {
   const { addToCart } = useCart();
   const { data: pastaTypes, isLoading: pastaTypesLoading } = useQuery({
     queryKey: ["pastaTypes"],
-    queryFn: () => backend.pastaTypes.list()
+    queryFn: () => client.getPastaTypes()
   });
   const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ["sauces"],
-    queryFn: () => backend.sauces.list()
+    queryFn: () => client.getSauces()
   });
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
     queryKey: ["ingredients"],
-    queryFn: () => backend.ingredients.list()
+    queryFn: () => client.getIngredients()
   });
   const handleIngredientToggle = (ingredient) => {
     setSelectedIngredients((prev) => {
@@ -24824,15 +24824,15 @@ function DeliveryMenuPage() {
   const { addToCart } = useCart();
   const { data: pastaTypes, isLoading: pastaLoading } = useQuery({
     queryKey: ["pasta-types"],
-    queryFn: () => backend.pastaTypes.list()
+    queryFn: () => client.getPastaTypes()
   });
   const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ["sauces"],
-    queryFn: () => backend.sauces.list()
+    queryFn: () => client.getSauces()
   });
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
     queryKey: ["ingredients"],
-    queryFn: () => backend.ingredients.list()
+    queryFn: () => client.getIngredients()
   });
   const categories = [
     { id: "all", name: "Todos", icon: "🍝" },
@@ -25086,7 +25086,7 @@ function OrderPage() {
   const { id } = useParams();
   const { data: order, isLoading, error } = useQuery({
     queryKey: ["order", id],
-    queryFn: () => backend.orders.getOrder({ id: parseInt(id) }),
+    queryFn: () => client.orders.getOrder({ id: parseInt(id) }),
     enabled: !!id
   });
   if (isLoading) {

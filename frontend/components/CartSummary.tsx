@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import backend from '~backend/client';
+import client from "../client";
 import { useCart } from '../context/CartContext';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -30,7 +30,7 @@ export default function CartSummary() {
   }, 0);
 
   const createOrderMutation = useMutation({
-    mutationFn: (orderData: any) => backend.orders.createOrder(orderData),
+    mutationFn: (orderData: any) => client.orders.createOrder(orderData),
     onSuccess: (order) => {
       clearCart();
       setIsCheckoutOpen(false);

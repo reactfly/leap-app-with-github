@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { CheckCircle, Clock, ChefHat, Package } from 'lucide-react';
-import backend from '~backend/client';
+import client from "../client";
 import type { OrderDetails } from '~backend/orders/get_order';
 
 const statusIcons = {
@@ -24,7 +24,7 @@ export default function OrderPage() {
   
   const { data: order, isLoading, error } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => backend.orders.getOrder({ id: parseInt(id!) }),
+    queryFn: () => client.orders.getOrder({ id: parseInt(id!) }),
     enabled: !!id,
   });
 

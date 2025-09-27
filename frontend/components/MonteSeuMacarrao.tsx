@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '../context/CartContext';
-import backend from '~backend/client';
+import client from '../client';
 
 interface MonteSeuMacarraoProps {
   onClose: () => void;
@@ -24,17 +24,17 @@ export default function MonteSeuMacarrao({ onClose }: MonteSeuMacarraoProps) {
 
   const { data: pastaTypes, isLoading: pastaTypesLoading } = useQuery({
     queryKey: ['pastaTypes'],
-    queryFn: () => backend.pastaTypes.list(),
+    queryFn: () => client.getPastaTypes(),
   });
 
   const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ['sauces'],
-    queryFn: () => backend.sauces.list(),
+    queryFn: () => client.getSauces(),
   });
 
   const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
     queryKey: ['ingredients'],
-    queryFn: () => backend.ingredients.list(),
+    queryFn: () => client.getIngredients(),
   });
 
   const handleIngredientToggle = (ingredient: any) => {
