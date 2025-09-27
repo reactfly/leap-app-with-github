@@ -53,11 +53,11 @@ CREATE TABLE order_item_ingredients (
 
 -- Insert sample data
 INSERT INTO pasta_types (name, description, price, image_url) VALUES
-('Fettuccine', 'Wide, flat pasta perfect for creamy sauces', 12.99, '/images/fettuccine.jpg'),
-('Spaghetti', 'Classic long thin pasta, versatile for any sauce', 11.99, '/images/spaghetti.jpg'),
-('Penne', 'Tube-shaped pasta that holds sauce beautifully', 11.99, '/images/penne.jpg'),
-('Linguine', 'Flat, narrow pasta ideal for seafood dishes', 13.99, '/images/linguine.jpg'),
-('Rigatoni', 'Large tube pasta perfect for hearty sauces', 12.99, '/images/rigatoni.jpg');
+('Penne', 'Massa tubular que segura o molho perfeitamente', 12.99, '/images/penne.jpg'),
+('Espaguete', 'Massa longa e fina clássica, versátil para qualquer molho', 11.99, '/images/spaghetti.jpg'),
+('Parafuso', 'Massa em formato de parafuso, ideal para molhos encorpados', 11.99, '/images/fusilli.jpg'),
+('Penne Integral', 'Massa tubular integral, rica em fibras e nutrientes', 13.99, '/images/penne-integral.jpg'),
+('Fettuccine', 'Massa larga e achatada, perfeita para molhos cremosos', 12.99, '/images/fettuccine.jpg');
 
 INSERT INTO sauces (name, description, price, image_url) VALUES
 ('Alfredo', 'Rich and creamy parmesan cheese sauce', 3.99, '/images/alfredo.jpg'),
