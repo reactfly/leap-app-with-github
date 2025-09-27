@@ -7,36 +7,41 @@ const PORT = 4000;
 app.use(cors());
 app.use(express.json());
 
-// Mock data
+// Mock data - Cardápio "Monte seu Macarrão"
 const pastaTypes = [
-  { id: 1, name: 'Penne', description: 'Massa tubular que segura o molho perfeitamente', price: 12.99 },
-  { id: 2, name: 'Espaguete', description: 'Massa longa e fina clássica, versátil para qualquer molho', price: 11.99 },
+  { id: 1, name: 'Espaguete', description: 'Massa longa e fina clássica, versátil para qualquer molho', price: 11.99 },
+  { id: 2, name: 'Fettuccine', description: 'Massa larga e achatada, perfeita para molhos cremosos', price: 12.99 },
   { id: 3, name: 'Parafuso', description: 'Massa em formato de parafuso, ideal para molhos encorpados', price: 11.99 },
-  { id: 4, name: 'Penne Integral', description: 'Massa tubular integral, rica em fibras e nutrientes', price: 13.99 },
-  { id: 5, name: 'Fettuccine', description: 'Massa larga e achatada, perfeita para molhos cremosos', price: 12.99 }
+  { id: 4, name: 'Penne', description: 'Massa tubular que segura o molho perfeitamente', price: 12.99 },
+  { id: 5, name: 'Penne Integral', description: 'Massa tubular integral, rica em fibras e nutrientes', price: 13.99 }
 ];
 
 const sauces = [
   { id: 1, name: 'Alfredo', description: 'Molho rico e cremoso de queijo parmesão', price: 3.99 },
-  { id: 2, name: 'Marinara', description: 'Molho clássico de tomate com ervas e alho', price: 2.99 },
-  { id: 3, name: 'Carbonara', description: 'Molho cremoso à base de ovos com pancetta', price: 4.99 },
-  { id: 4, name: 'Pesto', description: 'Molho fresco de manjericão, pinhões e parmesão', price: 3.99 },
-  { id: 5, name: 'Arrabbiata', description: 'Molho de tomate picante com pimentões vermelhos', price: 3.99 }
+  { id: 2, name: 'Arrabbiata', description: 'Molho picante de tomate com pimentões vermelhos', price: 3.49 },
+  { id: 3, name: 'Carbonara', description: 'Molho cremoso à base de ovo com pancetta', price: 4.99 },
+  { id: 4, name: 'Marinara', description: 'Molho clássico de tomate com ervas e alho', price: 2.99 },
+  { id: 5, name: 'Pesto', description: 'Molho fresco de manjericão, pinhões e parmesão', price: 4.49 }
 ];
 
 const ingredients = [
-  { id: 1, name: 'Frango Grelhado', category: 'protein', price: 4.99 },
-  { id: 2, name: 'Linguiça Italiana', category: 'protein', price: 5.99 },
-  { id: 3, name: 'Camarão', category: 'protein', price: 7.99 },
-  { id: 4, name: 'Pancetta', category: 'protein', price: 6.99 },
-  { id: 5, name: 'Cogumelos', category: 'vegetable', price: 2.99 },
-  { id: 6, name: 'Pimentões', category: 'vegetable', price: 2.99 },
-  { id: 7, name: 'Tomates Cereja', category: 'vegetable', price: 3.99 },
-  { id: 8, name: 'Espinafre', category: 'vegetable', price: 2.99 },
-  { id: 9, name: 'Brócolis', category: 'vegetable', price: 2.99 },
-  { id: 10, name: 'Queijo Parmesão', category: 'cheese', price: 1.99 },
-  { id: 11, name: 'Muçarela', category: 'cheese', price: 2.99 },
-  { id: 12, name: 'Ricota', category: 'cheese', price: 3.99 }
+  // Proteínas
+  { id: 1, name: 'Camarão', category: 'protein', price: 6.99, popular: true },
+  { id: 2, name: 'Frango Grelhado', category: 'protein', price: 4.99, popular: true },
+  { id: 3, name: 'Linguiça Italiana', category: 'protein', price: 4.49, popular: true },
+  { id: 4, name: 'Pancetta', category: 'protein', price: 3.99, popular: false },
+  
+  // Vegetais
+  { id: 5, name: 'Brócolis', category: 'vegetable', price: 2.49, popular: false },
+  { id: 6, name: 'Cogumelos', category: 'vegetable', price: 2.49, popular: true },
+  { id: 7, name: 'Espinafre', category: 'vegetable', price: 1.99, popular: false },
+  { id: 8, name: 'Pimentões', category: 'vegetable', price: 1.99, popular: false },
+  { id: 9, name: 'Tomate Cereja', category: 'vegetable', price: 2.49, popular: true },
+  
+  // Queijos
+  { id: 10, name: 'Mussarela', category: 'cheese', price: 2.49, popular: true },
+  { id: 11, name: 'Queijo Parmesão', category: 'cheese', price: 2.99, popular: true },
+  { id: 12, name: 'Ricota', category: 'cheese', price: 2.99, popular: false }
 ];
 
 // Routes
