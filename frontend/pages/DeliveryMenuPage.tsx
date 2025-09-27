@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { MapPin, Clock, Truck, Star, Search, Filter, Heart, Plus, Minus } from 'lucide-react';
+import { MapPin, Clock, Truck, Star, Search, Filter, Heart, Plus, Minus, ChefHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import backend from '~backend/client';
 import { useCart } from '../context/CartContext';
 import CartModal from '../components/CartModal';
+import MonteSeuMacarrao from '../components/MonteSeuMacarrao';
 
 export default function DeliveryMenuPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMonteSeuMacarraoOpen, setIsMonteSeuMacarraoOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { addToCart } = useCart();
@@ -126,10 +129,18 @@ export default function DeliveryMenuPage() {
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             Cardápio Fetuccine
           </h1>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
             Massas italianas autênticas entregues na sua casa. 
             Monte sua combinação perfeita e receba em até 30 minutos.
           </p>
+          
+          <Button 
+            onClick={() => setIsMonteSeuMacarraoOpen(true)}
+            className="bg-red-500 hover:bg-red-600 text-white text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-8"
+          >
+            <ChefHat className="w-6 h-6 mr-3" />
+            Monte seu Macarrão Personalizado
+          </Button>
           
           {/* Categories */}
           <div className="flex flex-wrap justify-center gap-2 mb-8">
@@ -292,7 +303,17 @@ export default function DeliveryMenuPage() {
           </div>
         </div>
       </div>
-
+      
+      {/* Monte seu Macarrão Modal */}
+      <Dialog open={isMonteSeuMacarraoOpen} onOpenChange={setIsMonteSeuMacarraoOpen}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">Monte seu Macarrão</DialogTitle>
+          </DialogHeader>
+          <MonteSeuMacarrao onClose={() => setIsMonteSeuMacarraoOpen(false)} />
+        </DialogContent>
+      </Dialog>
+      
       <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );
