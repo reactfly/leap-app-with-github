@@ -84,6 +84,8 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     createOrderMutation.mutate(orderData);
   };
 
+  if (!isOpen) return null;
+
   if (items.length === 0) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -192,12 +194,14 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
             <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
           </div>
 
+          <Button 
+            className="w-full bg-orange-500 hover:bg-orange-600 text-base py-3"
+            onClick={() => setIsCheckoutOpen(true)}
+          >
+            Finalizar Pedido
+          </Button>
+          
           <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full bg-orange-500 hover:bg-orange-600 text-base py-3">
-                Finalizar Pedido
-              </Button>
-            </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle>Complete Seu Pedido</DialogTitle>
