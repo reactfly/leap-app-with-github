@@ -59,7 +59,15 @@ app.get('/ingredients', (req, res) => {
 });
 
 app.post('/orders', (req, res) => {
-  const { customer_name, customer_email, customer_phone, items } = req.body;
+  const { 
+    customer_name, 
+    customer_email, 
+    customer_phone, 
+    delivery_address,
+    delivery_notes,
+    estimated_time,
+    items 
+  } = req.body;
   
   // Simulate order creation
   const orderId = Math.floor(Math.random() * 10000) + 1;
@@ -68,6 +76,9 @@ app.post('/orders', (req, res) => {
     customer_name,
     customer_email,
     customer_phone,
+    delivery_address: delivery_address || null,
+    delivery_notes: delivery_notes || null,
+    estimated_time: estimated_time || null,
     items: items.map(item => ({
       ...item,
       pasta_type: pastaTypes.find(p => p.id === item.pasta_type_id),
@@ -86,6 +97,13 @@ app.post('/orders', (req, res) => {
       return sum + ((pasta.price + sauce.price + ingredientTotal) * item.quantity);
     }, 0)
   };
+  
+  console.log('Novo pedido criado:', {
+    id: orderId,
+    customer: customer_name,
+    delivery: !!delivery_address,
+    total: order.total
+  });
   
   res.json(order);
 });
