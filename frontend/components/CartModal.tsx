@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Trash2, Plus, Minus, X } from 'lucide-react';
+import { ShoppingCart, Trash2, Plus, Minus, X, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import backend from '~backend/client';
 import { useCart } from '../context/CartContext';
 import { useToast } from '@/components/ui/use-toast';
+import DeliveryForm, { DeliveryData } from './DeliveryForm';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface CartModalProps {
 
 export default function CartModal({ isOpen, onClose }: CartModalProps) {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     email: '',
@@ -82,6 +84,26 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
     };
 
     createOrderMutation.mutate(orderData);
+  };
+
+  const handleDeliveryConfirm = (deliveryData: DeliveryData) => {
+    const orderData = {
+      customer_name: deliveryData.customer.name,
+      customer_email: deliveryData.customer.email || undefined,
+      customer_phone: deliveryData.customer.phone,
+      delivery_address: deliveryData.address,
+      delivery_notes: deliveryData.delivery.notes,
+      estimated_time: deliveryData.delivery.estimatedTime,
+      items: items.map(item => ({
+        pasta_type_id: item.pasta_type.id,
+        sauce_id: item.sauce.id,
+        ingredient_ids: item.ingredients.map(ing => ing.id),
+        quantity: item.quantity,
+      })),
+    };
+
+    createOrderMutation.mutate(orderData);
+    setIsDeliveryOpen(false);
   };
 
   if (!isOpen) return null;
@@ -194,12 +216,21 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
             <span className="text-orange-500">R$ {totalPrice.toFixed(2)}</span>
           </div>
 
-          <Button 
-            className="w-full bg-orange-500 hover:bg-orange-600 text-base py-3"
-            onClick={() => setIsCheckoutOpen(true)}
-          >
-            Finalizar Pedido
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button 
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-base py-3"
+              onClick={() => setIsCheckoutOpen(true)}
+            >
+              Retirada no Local
+            </Button>
+            <Button 
+              className="flex-1 bg-green-500 hover:bg-green-600 text-base py-3"
+              onClick={() => setIsDeliveryOpen(true)}
+            >
+              <Truck className="w-4 h-4 mr-2" />
+              Delivery
+            </Button>
+          </div>
           
           <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
             <DialogContent className="max-w-md">
@@ -258,5 +289,13 @@ export default function CartModal({ isOpen, onClose }: CartModalProps) {
         </div>
       </DialogContent>
     </Dialog>
+    
+    <DeliveryForm
+      isOpen={isDeliveryOpen}
+      onClose={() => setIsDeliveryOpen(false)}
+      onConfirm={handleDeliveryConfirm}
+      totalPrice={totalPrice}
+      items={items}
+    />
   );
 }
