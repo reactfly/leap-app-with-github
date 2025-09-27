@@ -77,15 +77,15 @@ export default function PastaBuilder() {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-2xl text-center">Monte Sua Massa Perfeita</CardTitle>
+      <CardHeader className="pb-4 sm:pb-6">
+        <CardTitle className="text-lg sm:text-xl lg:text-2xl text-center">Monte Sua Massa Perfeita</CardTitle>
         
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-between items-center mt-4 sm:mt-6">
           {steps.map((stepItem, index) => (
             <React.Fragment key={stepItem.number}>
               <div className="flex flex-col items-center">
                 <div 
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                  className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${
                     step >= stepItem.number 
                       ? 'bg-orange-500 text-white' 
                       : stepItem.completed 
@@ -95,12 +95,12 @@ export default function PastaBuilder() {
                 >
                   {stepItem.number}
                 </div>
-                <span className={`text-xs mt-1 ${step >= stepItem.number ? 'text-orange-500 font-medium' : 'text-gray-500'}`}>
+                <span className={`text-xs sm:text-sm mt-1 text-center px-1 ${step >= stepItem.number ? 'text-orange-500 font-medium' : 'text-gray-500'}`}>
                   {stepItem.title}
                 </span>
               </div>
               {index < steps.length - 1 && (
-                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
               )}
             </React.Fragment>
           ))}
@@ -110,19 +110,19 @@ export default function PastaBuilder() {
       <CardContent>
         {step === 1 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Escolha seu tipo de massa</h3>
+            <h3 className="text-base sm:text-lg font-semibold">Escolha seu tipo de massa</h3>
             {loadingPasta ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
+                  <div key={i} className="h-24 sm:h-28 lg:h-32 bg-gray-200 animate-pulse rounded-lg"></div>
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {pastaTypes?.pasta_types.map((pasta) => (
                   <div
                     key={pasta.id}
-                    className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                    className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg ${
                       selectedPasta?.id === pasta.id 
                         ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200' 
                         : 'border-gray-200 hover:border-orange-300'
@@ -130,17 +130,17 @@ export default function PastaBuilder() {
                     onClick={() => setSelectedPasta(pasta)}
                   >
                     <div className="text-center">
-                      <h4 className="font-semibold text-lg">{pasta.name}</h4>
-                      <p className="text-sm text-gray-600 mt-1">{pasta.description}</p>
-                      <p className="text-orange-500 font-bold mt-2">R$ {pasta.price.toFixed(2)}</p>
+                      <h4 className="font-semibold text-sm sm:text-base lg:text-lg">{pasta.name}</h4>
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">{pasta.description}</p>
+                      <p className="text-orange-500 font-bold mt-2 text-sm sm:text-base">R$ {pasta.price.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
               </div>
             )}
             {selectedPasta && (
-              <div className="flex justify-end mt-6">
-                <Button onClick={() => setStep(2)} className="bg-orange-500 hover:bg-orange-600">
+              <div className="flex justify-end mt-4 sm:mt-6">
+                <Button onClick={() => setStep(2)} className="bg-orange-500 hover:bg-orange-600 text-sm sm:text-base px-4 sm:px-6">
                   Próximo: Escolher Molho
                 </Button>
               </div>

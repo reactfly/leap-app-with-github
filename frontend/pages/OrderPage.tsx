@@ -53,49 +53,49 @@ export default function OrderPage() {
   const statusColor = statusColors[order.status as keyof typeof statusColors];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <div className="text-center mb-8">
-            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4`}>
-              <StatusIcon className={`w-8 h-8 ${statusColor}`} />
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-100 mb-3 sm:mb-4`}>
+              <StatusIcon className={`w-6 h-6 sm:w-8 sm:h-8 ${statusColor}`} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Pedido #{order.id}</h1>
-            <p className="text-gray-600 capitalize">Status: <span className={`font-semibold ${statusColor}`}>{order.status}</span></p>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Pedido #{order.id}</h1>
+            <p className="text-sm sm:text-base text-gray-600 capitalize">Status: <span className={`font-semibold ${statusColor}`}>{order.status}</span></p>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Informações do Cliente</h2>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <p><span className="font-medium">Nome:</span> {order.customer_name}</p>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">Informações do Cliente</h2>
+              <div className="bg-gray-50 rounded-lg p-3 sm:p-4 space-y-1 sm:space-y-2">
+                <p className="text-sm sm:text-base"><span className="font-medium">Nome:</span> {order.customer_name}</p>
                 {order.customer_email && (
-                  <p><span className="font-medium">Email:</span> {order.customer_email}</p>
+                  <p className="text-sm sm:text-base"><span className="font-medium">Email:</span> {order.customer_email}</p>
                 )}
                 {order.customer_phone && (
-                  <p><span className="font-medium">Telefone:</span> {order.customer_phone}</p>
+                  <p className="text-sm sm:text-base"><span className="font-medium">Telefone:</span> {order.customer_phone}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Itens do Pedido</h2>
-              <div className="space-y-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">Itens do Pedido</h2>
+              <div className="space-y-3 sm:space-y-4">
                 {order.items.map((item) => (
-                  <div key={item.id} className="bg-gray-50 rounded-lg p-4">
+                  <div key={item.id} className="bg-gray-50 rounded-lg p-3 sm:p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-lg">{item.pasta_type_name} com {item.sauce_name}</h3>
-                      <span className="text-lg font-bold">R$ {item.item_price.toFixed(2)}</span>
+                      <h3 className="font-semibold text-sm sm:text-base lg:text-lg pr-2">{item.pasta_type_name} com {item.sauce_name}</h3>
+                      <span className="text-sm sm:text-base lg:text-lg font-bold">R$ {item.item_price.toFixed(2)}</span>
                     </div>
-                    <p className="text-gray-600 mb-2">Quantidade: {item.quantity}</p>
+                    <p className="text-gray-600 mb-2 text-sm sm:text-base">Quantidade: {item.quantity}</p>
                     {item.ingredients.length > 0 && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-1">Ingredientes:</p>
-                        <div className="flex flex-wrap gap-2">
+                        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1">Ingredientes:</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
                           {item.ingredients.map((ingredient, index) => (
                             <span 
                               key={index}
-                              className="px-2 py-1 bg-orange-100 text-orange-700 text-sm rounded-full"
+                              className="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-orange-100 text-orange-700 text-xs sm:text-sm rounded-full"
                             >
                               {ingredient}
                             </span>
@@ -108,12 +108,12 @@ export default function OrderPage() {
               </div>
             </div>
 
-            <div className="border-t pt-6">
-              <div className="flex justify-between items-center text-xl font-bold">
+            <div className="border-t pt-4 sm:pt-6">
+              <div className="flex justify-between items-center text-lg sm:text-xl font-bold">
                 <span>Total:</span>
                 <span className="text-orange-500">R$ {order.total_price.toFixed(2)}</span>
               </div>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-gray-500 text-xs sm:text-sm mt-2">
                 Pedido realizado em {new Date(order.created_at).toLocaleDateString('pt-BR')} às {new Date(order.created_at).toLocaleTimeString('pt-BR')}
               </p>
             </div>
