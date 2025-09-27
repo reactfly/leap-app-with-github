@@ -34,7 +34,7 @@ export default function DeliveryMenuPage() {
     { id: 'all', name: 'Todos', icon: '🍝' },
     { id: 'classic', name: 'Clássicas', icon: '⭐' },
     { id: 'premium', name: 'Premium', icon: '👑' },
-    { id: 'vegetarian', name: 'Vegetarianas', icon: '🥬' },
+    { id: 'vegetarian', name: 'Especiais', icon: '🥬' },
   ];
 
   const filteredPastaTypes = pastaTypes?.filter(pasta => {
@@ -152,9 +152,16 @@ export default function DeliveryMenuPage() {
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-2">
                   <CardTitle className="text-xl font-bold text-gray-900">{pastaType.name}</CardTitle>
-                  <Badge variant="secondary" className="bg-orange-100 text-orange-700">
-                    {pastaType.category === 'premium' ? 'Premium' : pastaType.category === 'vegetarian' ? 'Vegetariana' : 'Clássica'}
-                  </Badge>
+                  <div className="flex items-center space-x-2">
+                    {pastaType.popular && (
+                      <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
+                        Popular
+                      </Badge>
+                    )}
+                    <Badge variant="secondary" className="bg-orange-100 text-orange-700">
+                      {pastaType.category === 'premium' ? 'Premium' : pastaType.category === 'vegetarian' ? 'Especial' : 'Clássica'}
+                    </Badge>
+                  </div>
                 </div>
                 <p className="text-gray-600 text-sm">{pastaType.description}</p>
                 <div className="flex items-center justify-between mt-3">
@@ -170,35 +177,36 @@ export default function DeliveryMenuPage() {
                 <div className="space-y-4">
                   {/* Sauce Selection */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Escolha o Molho:</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Molhos Populares:</h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {sauces?.slice(0, 4).map((sauce) => (
+                      {sauces?.filter(sauce => sauce.popular).slice(0, 4).map((sauce) => (
                         <Button
                           key={sauce.id}
                           variant="outline"
                           size="sm"
-                          className="text-xs justify-start"
+                          className="text-xs justify-start hover:bg-orange-50"
                           onClick={() => handleAddToCart(pastaType, sauce, [])}
                         >
                           {sauce.name}
                         </Button>
                       ))}
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">+ {sauces?.length - 4} outros molhos disponíveis</p>
                   </div>
 
                   {/* Popular Combinations */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Combinações Populares:</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Combinações Recomendadas:</h4>
                     <div className="space-y-2">
-                      {sauces?.slice(0, 2).map((sauce) => (
+                      {sauces?.filter(sauce => sauce.popular).slice(0, 2).map((sauce) => (
                         <Button
                           key={sauce.id}
                           variant="outline"
                           size="sm"
-                          className="w-full justify-between"
+                          className="w-full justify-between hover:bg-orange-50"
                           onClick={() => handleAddToCart(pastaType, sauce, [])}
                         >
-                          <span>{pastaType.name} + {sauce.name}</span>
+                          <span className="text-left">{pastaType.name} + {sauce.name}</span>
                           <span className="text-orange-500 font-semibold">
                             R$ {(pastaType.price + sauce.price).toFixed(2)}
                           </span>
@@ -224,6 +232,33 @@ export default function DeliveryMenuPage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Menu Stats */}
+        <div className="mt-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-8 text-white">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-4">Nosso Cardápio Completo</h2>
+            <p className="text-orange-100 text-lg">Variedade e qualidade em cada prato</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-4xl font-bold mb-2">{pastaTypes?.length || 0}</div>
+              <div className="text-orange-100">Tipos de Massa</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-2">{sauces?.length || 0}</div>
+              <div className="text-orange-100">Molhos Artesanais</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-2">{ingredients?.length || 0}</div>
+              <div className="text-orange-100">Ingredientes Frescos</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold mb-2">1000+</div>
+              <div className="text-orange-100">Combinações Possíveis</div>
+            </div>
+          </div>
         </div>
 
         {/* Delivery Info */}
