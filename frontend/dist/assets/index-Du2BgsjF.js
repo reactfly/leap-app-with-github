@@ -502,8 +502,8 @@ function requireReact_production() {
   react_production.use = function(usable) {
     return ReactSharedInternals.H.use(usable);
   };
-  react_production.useActionState = function(action, initialState2, permalink) {
-    return ReactSharedInternals.H.useActionState(action, initialState2, permalink);
+  react_production.useActionState = function(action, initialState, permalink) {
+    return ReactSharedInternals.H.useActionState(action, initialState, permalink);
   };
   react_production.useCallback = function(callback, deps) {
     return ReactSharedInternals.H.useCallback(callback, deps);
@@ -548,8 +548,8 @@ function requireReact_production() {
   react_production.useRef = function(initialValue) {
     return ReactSharedInternals.H.useRef(initialValue);
   };
-  react_production.useState = function(initialState2) {
-    return ReactSharedInternals.H.useState(initialState2);
+  react_production.useState = function(initialState) {
+    return ReactSharedInternals.H.useState(initialState);
   };
   react_production.useSyncExternalStore = function(subscribe, getSnapshot, getServerSnapshot) {
     return ReactSharedInternals.H.useSyncExternalStore(
@@ -1005,8 +1005,8 @@ function requireReactDom_production() {
   reactDom_production.unstable_batchedUpdates = function(fn, a) {
     return fn(a);
   };
-  reactDom_production.useFormState = function(action, initialState2, permalink) {
-    return ReactSharedInternals.H.useFormState(action, initialState2, permalink);
+  reactDom_production.useFormState = function(action, initialState, permalink) {
+    return ReactSharedInternals.H.useFormState(action, initialState, permalink);
   };
   reactDom_production.useFormStatus = function() {
     return ReactSharedInternals.H.useHostTransitionStatus();
@@ -3859,11 +3859,11 @@ function requireReactDomClient_production() {
     var root2 = enqueueConcurrentRenderForLane(fiber, 2);
     null !== root2 && scheduleUpdateOnFiber(root2, fiber, 2);
   }
-  function mountStateImpl(initialState2) {
+  function mountStateImpl(initialState) {
     var hook = mountWorkInProgressHook();
-    if ("function" === typeof initialState2) {
-      var initialStateInitializer = initialState2;
-      initialState2 = initialStateInitializer();
+    if ("function" === typeof initialState) {
+      var initialStateInitializer = initialState;
+      initialState = initialStateInitializer();
       if (shouldDoubleInvokeUserFnsInHooksDEV) {
         setIsStrictModeForDevtools(true);
         try {
@@ -3873,13 +3873,13 @@ function requireReactDomClient_production() {
         }
       }
     }
-    hook.memoizedState = hook.baseState = initialState2;
+    hook.memoizedState = hook.baseState = initialState;
     hook.queue = {
       pending: null,
       lanes: 0,
       dispatch: null,
       lastRenderedReducer: basicStateReducer,
-      lastRenderedState: initialState2
+      lastRenderedState: initialState
     };
     return hook;
   }
@@ -4481,7 +4481,7 @@ function requireReactDomClient_production() {
     useReducer: function(reducer2, initialArg, init) {
       var hook = mountWorkInProgressHook();
       if (void 0 !== init) {
-        var initialState2 = init(initialArg);
+        var initialState = init(initialArg);
         if (shouldDoubleInvokeUserFnsInHooksDEV) {
           setIsStrictModeForDevtools(true);
           try {
@@ -4490,14 +4490,14 @@ function requireReactDomClient_production() {
             setIsStrictModeForDevtools(false);
           }
         }
-      } else initialState2 = initialArg;
-      hook.memoizedState = hook.baseState = initialState2;
+      } else initialState = initialArg;
+      hook.memoizedState = hook.baseState = initialState;
       reducer2 = {
         pending: null,
         lanes: 0,
         dispatch: null,
         lastRenderedReducer: reducer2,
-        lastRenderedState: initialState2
+        lastRenderedState: initialState
       };
       hook.queue = reducer2;
       reducer2 = reducer2.dispatch = dispatchReducerAction.bind(
@@ -4512,11 +4512,11 @@ function requireReactDomClient_production() {
       initialValue = { current: initialValue };
       return hook.memoizedState = initialValue;
     },
-    useState: function(initialState2) {
-      initialState2 = mountStateImpl(initialState2);
-      var queue = initialState2.queue, dispatch2 = dispatchSetState.bind(null, currentlyRenderingFiber, queue);
+    useState: function(initialState) {
+      initialState = mountStateImpl(initialState);
+      var queue = initialState.queue, dispatch2 = dispatchSetState.bind(null, currentlyRenderingFiber, queue);
       queue.dispatch = dispatch2;
-      return [initialState2.memoizedState, dispatch2];
+      return [initialState.memoizedState, dispatch2];
     },
     useDebugValue: mountDebugValue,
     useDeferredValue: function(value, initialValue) {
@@ -17526,7 +17526,7 @@ function handleAndDispatchCustomEvent$1(name, handler, detail, { discrete }) {
     target.dispatchEvent(event);
   }
 }
-var Root$3 = DismissableLayer;
+var Root$2 = DismissableLayer;
 var Branch = DismissableLayerBranch;
 var useLayoutEffect2 = (globalThis == null ? void 0 : globalThis.document) ? reactExports.useLayoutEffect : () => {
 };
@@ -17540,11 +17540,11 @@ var Portal$1 = reactExports.forwardRef((props, forwardedRef) => {
   return container ? ReactDOM.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
 });
 Portal$1.displayName = PORTAL_NAME$1;
-function useStateMachine(initialState2, machine) {
+function useStateMachine(initialState, machine) {
   return reactExports.useReducer((state, event) => {
     const nextState = machine[state][event];
     return nextState ?? state;
-  }, initialState2);
+  }, initialState);
 }
 var Presence = (props) => {
   const { present, children } = props;
@@ -17560,8 +17560,8 @@ function usePresence(present) {
   const stylesRef = reactExports.useRef(null);
   const prevPresentRef = reactExports.useRef(present);
   const prevAnimationNameRef = reactExports.useRef("none");
-  const initialState2 = present ? "mounted" : "unmounted";
-  const [state, send] = useStateMachine(initialState2, {
+  const initialState = present ? "mounted" : "unmounted";
+  const [state, send] = useStateMachine(initialState, {
     mounted: {
       UNMOUNT: "unmounted",
       ANIMATION_OUT: "unmountSuspended"
@@ -18117,7 +18117,7 @@ var ToastImpl = reactExports.forwardRef(
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(ToastInteractiveProvider, { scope: __scopeToast, onClose: handleClose, children: reactDomExports.createPortal(
         /* @__PURE__ */ jsxRuntimeExports.jsx(Collection.ItemSlot, { scope: __scopeToast, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Root$3,
+          Root$2,
           {
             asChild: true,
             onEscapeKeyDown: composeEventHandlers(onEscapeKeyDown, () => {
@@ -18521,7 +18521,29 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$i = [
+const __iconNode$n = [
+  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
+  ["path", { d: "M19 12H5", key: "x3x0zl" }]
+];
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$n);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$m = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$m);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$l = [
   [
     "path",
     {
@@ -18531,60 +18553,76 @@ const __iconNode$i = [
   ],
   ["path", { d: "M6 17h12", key: "1jwigz" }]
 ];
-const ChefHat = createLucideIcon("chef-hat", __iconNode$i);
+const ChefHat = createLucideIcon("chef-hat", __iconNode$l);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$h = [["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]];
-const ChevronDown = createLucideIcon("chevron-down", __iconNode$h);
+const __iconNode$k = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$k);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$g = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$g);
-/**
- * @license lucide-react v0.484.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$f = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$f);
-/**
- * @license lucide-react v0.484.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$e = [
+const __iconNode$j = [
   ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335", key: "yps3ct" }],
   ["path", { d: "m9 11 3 3L22 4", key: "1pflzl" }]
 ];
-const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$e);
+const CircleCheckBig = createLucideIcon("circle-check-big", __iconNode$j);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$d = [
+const __iconNode$i = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
 ];
-const Clock = createLucideIcon("clock", __iconNode$d);
+const Clock = createLucideIcon("clock", __iconNode$i);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$c = [
+const __iconNode$h = [
+  [
+    "path",
+    {
+      d: "M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z",
+      key: "sc7q7i"
+    }
+  ]
+];
+const Funnel = createLucideIcon("funnel", __iconNode$h);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$g = [
+  [
+    "path",
+    {
+      d: "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z",
+      key: "c3ymky"
+    }
+  ]
+];
+const Heart = createLucideIcon("heart", __iconNode$g);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$f = [
   ["path", { d: "M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8", key: "5wwlr5" }],
   [
     "path",
@@ -18594,14 +18632,14 @@ const __iconNode$c = [
     }
   ]
 ];
-const House = createLucideIcon("house", __iconNode$c);
+const House = createLucideIcon("house", __iconNode$f);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$b = [
+const __iconNode$e = [
   [
     "path",
     {
@@ -18611,34 +18649,34 @@ const __iconNode$b = [
   ],
   ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
 ];
-const MapPin = createLucideIcon("map-pin", __iconNode$b);
+const MapPin = createLucideIcon("map-pin", __iconNode$e);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$a = [
+const __iconNode$d = [
   ["line", { x1: "4", x2: "20", y1: "12", y2: "12", key: "1e0a9i" }],
   ["line", { x1: "4", x2: "20", y1: "6", y2: "6", key: "1owob3" }],
   ["line", { x1: "4", x2: "20", y1: "18", y2: "18", key: "yk5zj1" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$a);
+const Menu = createLucideIcon("menu", __iconNode$d);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$9 = [["path", { d: "M5 12h14", key: "1ays0h" }]];
-const Minus = createLucideIcon("minus", __iconNode$9);
+const __iconNode$c = [["path", { d: "M5 12h14", key: "1ays0h" }]];
+const Minus = createLucideIcon("minus", __iconNode$c);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$8 = [
+const __iconNode$b = [
   [
     "path",
     {
@@ -18650,7 +18688,45 @@ const __iconNode$8 = [
   ["polyline", { points: "3.29 7 12 12 20.71 7", key: "ousv84" }],
   ["path", { d: "m7.5 4.27 9 5.15", key: "1c824w" }]
 ];
-const Package = createLucideIcon("package", __iconNode$8);
+const Package = createLucideIcon("package", __iconNode$b);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$a = [
+  [
+    "path",
+    {
+      d: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z",
+      key: "foiqr5"
+    }
+  ]
+];
+const Phone = createLucideIcon("phone", __iconNode$a);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$9 = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$9);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$8 = [
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
+  ["path", { d: "m21 21-4.3-4.3", key: "1qie3q" }]
+];
+const Search = createLucideIcon("search", __iconNode$8);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
@@ -18661,12 +18737,12 @@ const __iconNode$7 = [
   [
     "path",
     {
-      d: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z",
-      key: "foiqr5"
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
     }
   ]
 ];
-const Phone = createLucideIcon("phone", __iconNode$7);
+const Shield = createLucideIcon("shield", __iconNode$7);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
@@ -18674,28 +18750,6 @@ const Phone = createLucideIcon("phone", __iconNode$7);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$6 = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$6);
-/**
- * @license lucide-react v0.484.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$5 = [
-  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
-  ["path", { d: "m21 21-4.3-4.3", key: "1qie3q" }]
-];
-const Search = createLucideIcon("search", __iconNode$5);
-/**
- * @license lucide-react v0.484.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$4 = [
   ["circle", { cx: "8", cy: "21", r: "1", key: "jimo8o" }],
   ["circle", { cx: "19", cy: "21", r: "1", key: "13723u" }],
   [
@@ -18706,7 +18760,37 @@ const __iconNode$4 = [
     }
   ]
 ];
-const ShoppingCart = createLucideIcon("shopping-cart", __iconNode$4);
+const ShoppingCart = createLucideIcon("shopping-cart", __iconNode$6);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  [
+    "path",
+    {
+      d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
+      key: "r04s7s"
+    }
+  ]
+];
+const Star = createLucideIcon("star", __iconNode$5);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$4 = [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
+  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
+  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$4);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
@@ -18714,20 +18798,6 @@ const ShoppingCart = createLucideIcon("shopping-cart", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
-  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }],
-  ["line", { x1: "10", x2: "10", y1: "11", y2: "17", key: "1uufr5" }],
-  ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$3);
-/**
- * @license lucide-react v0.484.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$2 = [
   ["path", { d: "M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2", key: "wrbu53" }],
   ["path", { d: "M15 18H9", key: "1lyqi6" }],
   [
@@ -18740,7 +18810,18 @@ const __iconNode$2 = [
   ["circle", { cx: "17", cy: "18", r: "2", key: "332jqn" }],
   ["circle", { cx: "7", cy: "18", r: "2", key: "19iecd" }]
 ];
-const Truck = createLucideIcon("truck", __iconNode$2);
+const Truck = createLucideIcon("truck", __iconNode$3);
+/**
+ * @license lucide-react v0.484.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$2 = [
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+];
+const User = createLucideIcon("user", __iconNode$2);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
@@ -18748,10 +18829,10 @@ const Truck = createLucideIcon("truck", __iconNode$2);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$1 = [
-  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
-  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-const User = createLucideIcon("user", __iconNode$1);
+const X = createLucideIcon("x", __iconNode$1);
 /**
  * @license lucide-react v0.484.0 - ISC
  *
@@ -18759,10 +18840,15 @@ const User = createLucideIcon("user", __iconNode$1);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+  [
+    "path",
+    {
+      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+      key: "1xq2db"
+    }
+  ]
 ];
-const X = createLucideIcon("x", __iconNode);
+const Zap = createLucideIcon("zap", __iconNode);
 const CLASS_PART_SEPARATOR = "-";
 const createClassGroupUtils = (config) => {
   const classMap = createClassMap(config);
@@ -21886,57 +21972,6 @@ function useCart() {
   }
   return context;
 }
-function Input({ className, type, ...props }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "input",
-    {
-      type,
-      "data-slot": "input",
-      className: cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className
-      ),
-      ...props
-    }
-  );
-}
-var NAME = "Label";
-var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.label,
-    {
-      ...props,
-      ref: forwardedRef,
-      onMouseDown: (event) => {
-        var _a2;
-        const target = event.target;
-        if (target.closest("button, input, select, textarea")) return;
-        (_a2 = props.onMouseDown) == null ? void 0 : _a2.call(props, event);
-        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
-      }
-    }
-  );
-});
-Label$1.displayName = NAME;
-var Root$2 = Label$1;
-function Label({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Root$2,
-    {
-      "data-slot": "label",
-      className: cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className
-      ),
-      ...props
-    }
-  );
-}
 var useReactId = React$1[" useId ".trim().toString()] || (() => void 0);
 var count$1 = 0;
 function useId(deterministicId) {
@@ -22982,11 +23017,11 @@ var Dialog$1 = (props) => {
   );
 };
 Dialog$1.displayName = DIALOG_NAME;
-var TRIGGER_NAME$1 = "DialogTrigger";
-var DialogTrigger$1 = reactExports.forwardRef(
+var TRIGGER_NAME = "DialogTrigger";
+var DialogTrigger = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, ...triggerProps } = props;
-    const context = useDialogContext(TRIGGER_NAME$1, __scopeDialog);
+    const context = useDialogContext(TRIGGER_NAME, __scopeDialog);
     const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Primitive.button,
@@ -22995,7 +23030,7 @@ var DialogTrigger$1 = reactExports.forwardRef(
         "aria-haspopup": "dialog",
         "aria-expanded": context.open,
         "aria-controls": context.contentId,
-        "data-state": getState$1(context.open),
+        "data-state": getState(context.open),
         ...triggerProps,
         ref: composedTriggerRef,
         onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -23003,7 +23038,7 @@ var DialogTrigger$1 = reactExports.forwardRef(
     );
   }
 );
-DialogTrigger$1.displayName = TRIGGER_NAME$1;
+DialogTrigger.displayName = TRIGGER_NAME;
 var PORTAL_NAME = "DialogPortal";
 var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME, {
   forceMount: void 0
@@ -23035,7 +23070,7 @@ var DialogOverlayImpl = reactExports.forwardRef(
       /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Primitive.div,
         {
-          "data-state": getState$1(context.open),
+          "data-state": getState(context.open),
           ...overlayProps,
           ref: forwardedRef,
           style: { pointerEvents: "auto", ...overlayProps.style }
@@ -23044,19 +23079,19 @@ var DialogOverlayImpl = reactExports.forwardRef(
     );
   }
 );
-var CONTENT_NAME$1 = "DialogContent";
+var CONTENT_NAME = "DialogContent";
 var DialogContent$1 = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const portalContext = usePortalContext(CONTENT_NAME$1, props.__scopeDialog);
+    const portalContext = usePortalContext(CONTENT_NAME, props.__scopeDialog);
     const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
   }
 );
-DialogContent$1.displayName = CONTENT_NAME$1;
+DialogContent$1.displayName = CONTENT_NAME;
 var DialogContentModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
     reactExports.useEffect(() => {
@@ -23091,7 +23126,7 @@ var DialogContentModal = reactExports.forwardRef(
 );
 var DialogContentNonModal = reactExports.forwardRef(
   (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME$1, props.__scopeDialog);
+    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
     const hasInteractedOutsideRef = reactExports.useRef(false);
     const hasPointerDownOutsideRef = reactExports.useRef(false);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -23134,7 +23169,7 @@ var DialogContentNonModal = reactExports.forwardRef(
 var DialogContentImpl = reactExports.forwardRef(
   (props, forwardedRef) => {
     const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME$1, __scopeDialog);
+    const context = useDialogContext(CONTENT_NAME, __scopeDialog);
     const contentRef = reactExports.useRef(null);
     const composedRefs = useComposedRefs(forwardedRef, contentRef);
     useFocusGuards();
@@ -23154,7 +23189,7 @@ var DialogContentImpl = reactExports.forwardRef(
               id: context.contentId,
               "aria-describedby": context.descriptionId,
               "aria-labelledby": context.titleId,
-              "data-state": getState$1(context.open),
+              "data-state": getState(context.open),
               ...contentProps,
               ref: composedRefs,
               onDismiss: () => context.onOpenChange(false)
@@ -23204,12 +23239,12 @@ var DialogClose = reactExports.forwardRef(
   }
 );
 DialogClose.displayName = CLOSE_NAME;
-function getState$1(open) {
+function getState(open) {
   return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-  contentName: CONTENT_NAME$1,
+  contentName: CONTENT_NAME,
   titleName: TITLE_NAME,
   docsSlug: "dialog"
 });
@@ -23243,7 +23278,6 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
   return null;
 };
 var Root$1 = Dialog$1;
-var Trigger = DialogTrigger$1;
 var Portal = DialogPortal$1;
 var Overlay = DialogOverlay$1;
 var Content = DialogContent$1;
@@ -23253,11 +23287,6 @@ function Dialog({
   ...props
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Root$1, { "data-slot": "dialog", ...props });
-}
-function DialogTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Trigger, { "data-slot": "dialog-trigger", ...props });
 }
 function DialogPortal({
   ...props
@@ -23789,6 +23818,57 @@ var ErrCode = /* @__PURE__ */ ((ErrCode2) => {
   return ErrCode2;
 })(ErrCode || {});
 const backend = new Client("http://localhost:4000", { requestInit: { credentials: "include" } });
+function Input({ className, type, ...props }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "input",
+    {
+      type,
+      "data-slot": "input",
+      className: cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      ),
+      ...props
+    }
+  );
+}
+var NAME = "Label";
+var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Primitive.label,
+    {
+      ...props,
+      ref: forwardedRef,
+      onMouseDown: (event) => {
+        var _a2;
+        const target = event.target;
+        if (target.closest("button, input, select, textarea")) return;
+        (_a2 = props.onMouseDown) == null ? void 0 : _a2.call(props, event);
+        if (!event.defaultPrevented && event.detail > 1) event.preventDefault();
+      }
+    }
+  );
+});
+Label$1.displayName = NAME;
+var Root = Label$1;
+function Label({
+  className,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Root,
+    {
+      "data-slot": "label",
+      className: cn(
+        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      ),
+      ...props
+    }
+  );
+}
 function Card({ className, ...props }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
@@ -24287,13 +24367,7 @@ _Pedido realizado via sistema Fetuccine_`;
   ] }) });
 }
 function CartModal({ isOpen, onClose }) {
-  const [isCheckoutOpen, setIsCheckoutOpen] = reactExports.useState(false);
   const [isDeliveryOpen, setIsDeliveryOpen] = reactExports.useState(false);
-  const [customerInfo, setCustomerInfo] = reactExports.useState({
-    name: "",
-    email: "",
-    phone: ""
-  });
   const { items, removeItem, updateQuantity, clearCart } = useCart();
   const { toast: toast2 } = useToast();
   const navigate = useNavigate();
@@ -24305,8 +24379,6 @@ function CartModal({ isOpen, onClose }) {
     mutationFn: (orderData) => backend.orders.createOrder(orderData),
     onSuccess: (order) => {
       clearCart();
-      setIsCheckoutOpen(false);
-      setCustomerInfo({ name: "", email: "", phone: "" });
       onClose();
       navigate(`/order/${order.id}`);
       toast2({
@@ -24323,29 +24395,6 @@ function CartModal({ isOpen, onClose }) {
       });
     }
   });
-  const handleCheckout = (e) => {
-    e.preventDefault();
-    if (!customerInfo.name.trim()) {
-      toast2({
-        title: "Erro",
-        description: "Por favor, digite seu nome.",
-        variant: "destructive"
-      });
-      return;
-    }
-    const orderData = {
-      customer_name: customerInfo.name,
-      customer_email: customerInfo.email || void 0,
-      customer_phone: customerInfo.phone || void 0,
-      items: items.map((item) => ({
-        pasta_type_id: item.pasta_type.id,
-        sauce_id: item.sauce.id,
-        ingredient_ids: item.ingredients.map((ing) => ing.id),
-        quantity: item.quantity
-      }))
-    };
-    createOrderMutation.mutate(orderData);
-  };
   const handleDeliveryConfirm = (deliveryData) => {
     const orderData = {
       customer_name: deliveryData.customer.name,
@@ -24462,87 +24511,17 @@ function CartModal({ isOpen, onClose }) {
             totalPrice.toFixed(2)
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              className: "flex-1 bg-orange-500 hover:bg-orange-600 text-base py-3",
-              onClick: () => setIsCheckoutOpen(true),
-              children: "Retirada no Local"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            Button,
-            {
-              className: "flex-1 bg-green-500 hover:bg-green-600 text-base py-3",
-              onClick: () => setIsDeliveryOpen(true),
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-4 h-4 mr-2" }),
-                "Delivery"
-              ]
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: isCheckoutOpen, onOpenChange: setIsCheckoutOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-md", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Complete Seu Pedido" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleCheckout, className: "space-y-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "name", children: "Nome *" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "name",
-                  value: customerInfo.name,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, name: e.target.value })),
-                  placeholder: "Digite seu nome",
-                  required: true
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "email", children: "Email" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "email",
-                  type: "email",
-                  value: customerInfo.email,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, email: e.target.value })),
-                  placeholder: "Digite seu email (opcional)"
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "phone", children: "Telefone" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "phone",
-                  type: "tel",
-                  value: customerInfo.phone,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, phone: e.target.value })),
-                  placeholder: "Digite seu telefone (opcional)"
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center text-lg font-bold", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Total:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-orange-500", children: [
-                "R$ ",
-                totalPrice.toFixed(2)
-              ] })
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
-              {
-                type: "submit",
-                className: "w-full bg-orange-500 hover:bg-orange-600",
-                disabled: createOrderMutation.isPending,
-                children: createOrderMutation.isPending ? "Realizando Pedido..." : "Realizar Pedido"
-              }
-            )
-          ] })
-        ] }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            className: "w-full bg-green-500 hover:bg-green-600 text-lg py-4 font-semibold",
+            onClick: () => setIsDeliveryOpen(true),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-5 h-5 mr-2" }),
+              "Finalizar Pedido"
+            ]
+          }
+        )
       ] })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -24562,19 +24541,27 @@ function Layout({ children }) {
   const [isCartOpen, setIsCartOpen] = reactExports.useState(false);
   const { items } = useCart();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "bg-white/95 backdrop-blur-sm shadow-lg border-b border-orange-200 sticky top-0 z-50", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-2 sm:px-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-14 sm:h-16", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/", className: "flex items-center space-x-1 sm:space-x-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-bold text-sm sm:text-lg", children: "F" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg sm:text-xl font-bold text-gray-800", children: "Fetuccine" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-gray-50", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("header", { className: "bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between h-16", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/", className: "flex items-center space-x-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-bold text-lg", children: "F" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold text-gray-900", children: "Fetuccine" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden md:flex items-center space-x-4 lg:space-x-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden md:flex items-center space-x-6", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Link,
             {
               to: "/",
-              className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base",
+              className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium",
+              children: "Início"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Link,
+            {
+              to: "/menu",
+              className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium",
               children: "Cardápio"
             }
           ),
@@ -24582,7 +24569,7 @@ function Layout({ children }) {
             Link,
             {
               to: "/about",
-              className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base",
+              className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium",
               children: "Sobre"
             }
           ),
@@ -24590,20 +24577,32 @@ function Layout({ children }) {
             Link,
             {
               to: "/contact",
-              className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium text-sm lg:text-base",
+              className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium",
               children: "Contato"
             }
-          ),
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center space-x-4 text-sm text-gray-600", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-4 h-4 text-red-500" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "São Paulo, SP" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-4 h-4 text-green-500" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "25-30 min" })
+            ] })
+          ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(
             Button,
             {
               variant: "outline",
-              className: "relative text-xs lg:text-sm px-2 lg:px-4",
+              className: "relative bg-red-500 text-white hover:bg-red-600 border-red-500",
               onClick: () => setIsCartOpen(true),
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-3 h-3 lg:w-4 lg:h-4 mr-1 lg:mr-2" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-4 h-4 mr-2" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "Carrinho" }),
-                itemCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full w-4 h-4 lg:w-5 lg:h-5 flex items-center justify-center", children: itemCount })
+                itemCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-2 -right-2 bg-white text-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold", children: itemCount })
               ]
             }
           )
@@ -24614,11 +24613,11 @@ function Layout({ children }) {
             {
               variant: "outline",
               size: "sm",
-              className: "relative p-2",
+              className: "relative bg-red-500 text-white hover:bg-red-600 border-red-500",
               onClick: () => setIsCartOpen(true),
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-4 h-4" }),
-                itemCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center", children: itemCount })
+                itemCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute -top-1 -right-1 bg-white text-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold", children: itemCount })
               ]
             }
           ),
@@ -24634,12 +24633,21 @@ function Layout({ children }) {
           )
         ] })
       ] }),
-      isMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden py-3 border-t border-orange-200 bg-white/95 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "flex flex-col space-y-2", children: [
+      isMenuOpen && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:hidden py-3 border-t border-gray-200 bg-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "flex flex-col space-y-2", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           Link,
           {
             to: "/",
-            className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm",
+            className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-red-50 text-sm",
+            onClick: () => setIsMenuOpen(false),
+            children: "Início"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Link,
+          {
+            to: "/menu",
+            className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-red-50 text-sm",
             onClick: () => setIsMenuOpen(false),
             children: "Cardápio"
           }
@@ -24648,7 +24656,7 @@ function Layout({ children }) {
           Link,
           {
             to: "/about",
-            className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm",
+            className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-red-50 text-sm",
             onClick: () => setIsMenuOpen(false),
             children: "Sobre"
           }
@@ -24657,7 +24665,7 @@ function Layout({ children }) {
           Link,
           {
             to: "/contact",
-            className: "text-gray-600 hover:text-orange-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 text-sm",
+            className: "text-gray-600 hover:text-red-500 transition-colors duration-200 font-medium px-3 py-2 rounded-lg hover:bg-red-50 text-sm",
             onClick: () => setIsMenuOpen(false),
             children: "Contato"
           }
@@ -24665,813 +24673,808 @@ function Layout({ children }) {
       ] }) })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1", children }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "bg-gray-900 text-white py-8 lg:py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2 lg:col-span-1", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "bg-gray-900 text-white py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:col-span-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2 mb-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-bold text-sm sm:text-lg", children: "F" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-lg sm:text-xl font-bold", children: "Fetuccine" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white font-bold text-lg", children: "F" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold", children: "Fetuccine" })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-sm sm:text-base", children: "Massas italianas autênticas, feitas frescas diariamente com os melhores ingredientes." })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-base sm:text-lg font-semibold mb-3 sm:mb-4", children: "Informações de Contato" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 sm:space-y-2 text-gray-400 text-sm sm:text-base", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Rua das Massas, 123" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Centro, São Paulo - SP" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Telefone: (11) 1234-5678" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Email: info@fetuccine.com" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-400 text-base mb-6 max-w-md", children: "Massas italianas autênticas entregues na sua casa. Tradição italiana com a conveniência do delivery moderno." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex space-x-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "outline", size: "sm", className: "border-gray-600 text-gray-300 hover:bg-gray-800", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-4 h-4 mr-2" }),
+              "São Paulo, SP"
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "outline", size: "sm", className: "border-gray-600 text-gray-300 hover:bg-gray-800", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-4 h-4 mr-2" }),
+              "25-30 min"
+            ] })
           ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-base sm:text-lg font-semibold mb-3 sm:mb-4", children: "Horários" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1 sm:space-y-2 text-gray-400 text-sm sm:text-base", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold mb-4", children: "Delivery" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 text-gray-400", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Entregamos em toda a região" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Tempo médio: 25-30 minutos" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Delivery grátis acima de R$ 30" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "WhatsApp: (11) 98765-4321" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold mb-4", children: "Horários" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 text-gray-400", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Segunda - Quinta: 11h - 22h" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Sexta - Sábado: 11h - 23h" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Domingo: 12h - 21h" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Domingo: 12h - 21h" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Delivery até 30 min antes" })
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400 text-sm sm:text-base", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "© 2024 Restaurante Fetuccine. Todos os direitos reservados." }) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-gray-800 mt-8 pt-8 text-center text-gray-400", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "© 2024 Restaurante Fetuccine. Todos os direitos reservados." }) })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(CartModal, { isOpen: isCartOpen, onClose: () => setIsCartOpen(false) })
   ] });
 }
-const ErrorBoundaryContext = reactExports.createContext(null);
-const initialState = {
-  didCatch: false,
-  error: null
-};
-class ErrorBoundary extends reactExports.Component {
-  constructor(props) {
-    super(props);
-    this.resetErrorBoundary = this.resetErrorBoundary.bind(this);
-    this.state = initialState;
-  }
-  static getDerivedStateFromError(error) {
-    return {
-      didCatch: true,
-      error
-    };
-  }
-  resetErrorBoundary() {
-    const {
-      error
-    } = this.state;
-    if (error !== null) {
-      var _this$props$onReset, _this$props;
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+const badgeVariants = cva(
+  "inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  {
+    variants: {
+      variant: {
+        default: "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        secondary: "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+        destructive: "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline: "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground"
       }
-      (_this$props$onReset = (_this$props = this.props).onReset) === null || _this$props$onReset === void 0 ? void 0 : _this$props$onReset.call(_this$props, {
-        args,
-        reason: "imperative-api"
-      });
-      this.setState(initialState);
+    },
+    defaultVariants: {
+      variant: "default"
     }
   }
-  componentDidCatch(error, info) {
-    var _this$props$onError, _this$props2;
-    (_this$props$onError = (_this$props2 = this.props).onError) === null || _this$props$onError === void 0 ? void 0 : _this$props$onError.call(_this$props2, error, info);
-  }
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      didCatch
-    } = this.state;
-    const {
-      resetKeys
-    } = this.props;
-    if (didCatch && prevState.error !== null && hasArrayChanged(prevProps.resetKeys, resetKeys)) {
-      var _this$props$onReset2, _this$props3;
-      (_this$props$onReset2 = (_this$props3 = this.props).onReset) === null || _this$props$onReset2 === void 0 ? void 0 : _this$props$onReset2.call(_this$props3, {
-        next: resetKeys,
-        prev: prevProps.resetKeys,
-        reason: "keys"
-      });
-      this.setState(initialState);
+);
+function Badge({
+  className,
+  variant,
+  asChild = false,
+  ...props
+}) {
+  const Comp = asChild ? Slot$1 : "span";
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Comp,
+    {
+      "data-slot": "badge",
+      className: cn(badgeVariants({ variant }), className),
+      ...props
     }
-  }
-  render() {
-    const {
-      children,
-      fallbackRender,
-      FallbackComponent,
-      fallback
-    } = this.props;
-    const {
-      didCatch,
-      error
-    } = this.state;
-    let childToRender = children;
-    if (didCatch) {
-      const props = {
-        error,
-        resetErrorBoundary: this.resetErrorBoundary
-      };
-      if (typeof fallbackRender === "function") {
-        childToRender = fallbackRender(props);
-      } else if (FallbackComponent) {
-        childToRender = reactExports.createElement(FallbackComponent, props);
-      } else if (fallback !== void 0) {
-        childToRender = fallback;
-      } else {
-        throw error;
-      }
-    }
-    return reactExports.createElement(ErrorBoundaryContext.Provider, {
-      value: {
-        didCatch,
-        error,
-        resetErrorBoundary: this.resetErrorBoundary
-      }
-    }, childToRender);
-  }
+  );
 }
-function hasArrayChanged() {
-  let a = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : [];
-  let b = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : [];
-  return a.length !== b.length || a.some((item, index) => !Object.is(item, b[index]));
+function HomePage() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-gray-50", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white shadow-sm border-b", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-5 h-5 text-red-500" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-gray-700", children: "Entregar em" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-semibold text-gray-900", children: "São Paulo, SP" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", size: "sm", className: "text-red-500", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Heart, { className: "w-4 h-4 mr-1" }),
+          "Favoritos"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Input,
+          {
+            type: "text",
+            placeholder: "Buscar restaurantes, pratos ou bebidas",
+            className: "pl-10 pr-4 py-3 text-base border-gray-300 focus:border-red-500 focus:ring-red-500"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Button,
+          {
+            variant: "outline",
+            size: "sm",
+            className: "absolute right-2 top-1/2 transform -translate-y-1/2",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Funnel, { className: "w-4 h-4" })
+          }
+        )
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "bg-gradient-to-r from-red-500 to-red-600 text-white py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container mx-auto px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center max-w-4xl mx-auto", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-4xl lg:text-5xl font-bold mb-4", children: [
+        "Massas Italianas",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "block text-yellow-300", children: "Entregues na Sua Casa" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg lg:text-xl text-red-100 mb-8 max-w-2xl mx-auto", children: "Tradição italiana com a conveniência do delivery. Pedidos entregues em até 30 minutos." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, size: "lg", className: "bg-white text-red-500 hover:bg-gray-100 text-lg px-8 py-4 font-semibold", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/menu", children: "Ver Cardápio Completo" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, variant: "outline", size: "lg", className: "border-white text-white hover:bg-white hover:text-red-500 text-lg px-8 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/about", children: "Sobre o Restaurante" }) })
+      ] })
+    ] }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-12 bg-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold text-gray-900", children: "Destaques do Dia" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "ghost", className: "text-red-500", children: "Ver todos" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-6xl", children: "🍝" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-bold text-lg", children: "Penne Alfredo" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-400 fill-current" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "4.8" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 text-sm mb-3", children: "Massa tubular com molho cremoso de queijo parmesão" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold text-red-500", children: "R$ 16,98" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-green-100 text-green-700", children: "Popular" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-6xl", children: "🥬" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-bold text-lg", children: "Espaguete Integral" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-400 fill-current" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "4.6" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 text-sm mb-3", children: "Massa integral saudável com molho marinara" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold text-red-500", children: "R$ 14,98" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-green-100 text-green-700", children: "Saudável" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-6xl", children: "👑" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-bold text-lg", children: "Fettuccine Premium" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-400 fill-current" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "4.9" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 text-sm mb-3", children: "Massa larga com molho truffle premium" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold text-red-500", children: "R$ 23,98" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-purple-100 text-purple-700", children: "Premium" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-6xl", children: "🌶️" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-bold text-lg", children: "Arrabbiata Picante" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-400 fill-current" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium", children: "4.7" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 text-sm mb-3", children: "Molho de tomate picante com pimentões" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xl font-bold text-red-500", children: "R$ 15,98" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "bg-red-100 text-red-700", children: "Picante" })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-12 bg-gray-50", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold text-gray-900 mb-4", children: "Por que escolher o Fetuccine?" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg text-gray-600", children: "Qualidade e conveniência em cada pedido" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl p-6 shadow-lg text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { className: "w-8 h-8 text-red-500" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-gray-900 mb-2", children: "Entrega Rápida" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Pedidos entregues em até 30 minutos. Preparo na hora com ingredientes frescos." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl p-6 shadow-lg text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "w-8 h-8 text-green-500" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-gray-900 mb-2", children: "Qualidade Garantida" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Massas artesanais e ingredientes selecionados. Tradição italiana preservada." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white rounded-xl p-6 shadow-lg text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-8 h-8 text-blue-500" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold text-gray-900 mb-2", children: "Delivery Especializado" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Equipe treinada para entregar suas massas na temperatura perfeita." })
+        ] })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-12 bg-white", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "container mx-auto px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-8 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-8 h-8" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold mb-2", children: "Tempo de Entrega" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-100", children: "25-30 minutos em média" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-8 h-8" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold mb-2", children: "Área de Cobertura" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-100", children: "Toda a região metropolitana" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-8 h-8" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-bold mb-2", children: "Taxa de Entrega" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-100", children: "Grátis acima de R$ 30" })
+      ] })
+    ] }) }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-16 bg-gray-900 text-white", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 text-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl lg:text-4xl font-bold mb-4", children: "Pronto para pedir?" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xl text-gray-300 mb-8 max-w-2xl mx-auto", children: "Monte sua massa perfeita e receba em casa em até 30 minutos" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { asChild: true, size: "lg", className: "bg-red-500 hover:bg-red-600 text-lg px-8 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/menu", children: "Fazer Pedido Agora" }) })
+    ] }) })
+  ] });
 }
-function PastaBuilder() {
-  const [step, setStep] = reactExports.useState(1);
+function MonteSeuMacarrao({ onClose }) {
+  const [currentStep, setCurrentStep] = reactExports.useState("pasta");
   const [selectedPasta, setSelectedPasta] = reactExports.useState(null);
   const [selectedSauce, setSelectedSauce] = reactExports.useState(null);
   const [selectedIngredients, setSelectedIngredients] = reactExports.useState([]);
-  const { addItem } = useCart();
-  const { toast: toast2 } = useToast();
-  const { data: pastaTypes, isLoading: loadingPasta } = useQuery({
-    queryKey: ["pasta-types"],
-    queryFn: () => backend.menu.listPastaTypes()
+  const [quantity, setQuantity] = reactExports.useState(1);
+  const { addToCart } = useCart();
+  const { data: pastaTypes, isLoading: pastaTypesLoading } = useQuery({
+    queryKey: ["pastaTypes"],
+    queryFn: () => backend.pastaTypes.list()
   });
-  const { data: sauces, isLoading: loadingSauces } = useQuery({
+  const { data: sauces, isLoading: saucesLoading } = useQuery({
     queryKey: ["sauces"],
-    queryFn: () => backend.menu.listSauces()
+    queryFn: () => backend.sauces.list()
   });
-  const { data: ingredients, isLoading: loadingIngredients } = useQuery({
+  const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
     queryKey: ["ingredients"],
-    queryFn: () => backend.menu.listIngredients({ category: void 0 })
+    queryFn: () => backend.ingredients.list()
   });
   const handleIngredientToggle = (ingredient) => {
     setSelectedIngredients((prev) => {
-      const isSelected = prev.some((i) => i.id === ingredient.id);
+      const isSelected = prev.find((item) => item.id === ingredient.id);
       if (isSelected) {
-        return prev.filter((i) => i.id !== ingredient.id);
+        return prev.filter((item) => item.id !== ingredient.id);
       } else {
         return [...prev, ingredient];
       }
     });
   };
-  const addToCart = () => {
-    if (!selectedPasta || !selectedSauce) return;
-    addItem({
-      pasta_type: selectedPasta,
-      sauce: selectedSauce,
+  const handleNext = () => {
+    if (currentStep === "pasta" && selectedPasta) {
+      setCurrentStep("sauce");
+    } else if (currentStep === "sauce" && selectedSauce) {
+      setCurrentStep("ingredients");
+    } else if (currentStep === "ingredients") {
+      setCurrentStep("review");
+    }
+  };
+  const handleBack = () => {
+    if (currentStep === "sauce") {
+      setCurrentStep("pasta");
+    } else if (currentStep === "ingredients") {
+      setCurrentStep("sauce");
+    } else if (currentStep === "review") {
+      setCurrentStep("ingredients");
+    }
+  };
+  const handleAddToCart = () => {
+    if (selectedPasta && selectedSauce) {
+      addToCart({
+        pasta_type: selectedPasta,
+        sauce: selectedSauce,
+        ingredients: selectedIngredients,
+        quantity
+      });
+      onClose();
+    }
+  };
+  const getTotalPrice = () => {
+    if (!selectedPasta || !selectedSauce) return 0;
+    const pastaPrice = selectedPasta.price;
+    const saucePrice = selectedSauce.price;
+    const ingredientsPrice = selectedIngredients.reduce((sum, ing) => sum + ing.price, 0);
+    return (pastaPrice + saucePrice + ingredientsPrice) * quantity;
+  };
+  const canProceed = () => {
+    if (currentStep === "pasta") return selectedPasta;
+    if (currentStep === "sauce") return selectedSauce;
+    if (currentStep === "ingredients") return true;
+    return false;
+  };
+  if (pastaTypesLoading || saucesLoading || ingredientsLoading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-center items-center h-96", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Carregando opções..." }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto p-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold text-gray-900 mb-2", children: "Monte seu Macarrão" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Crie sua combinação perfeita passo a passo" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center mt-6 space-x-4", children: [
+        { key: "pasta", label: "1. Massa", icon: "🍝" },
+        { key: "sauce", label: "2. Molho", icon: "🍅" },
+        { key: "ingredients", label: "3. Ingredientes", icon: "🥬" },
+        { key: "review", label: "4. Revisar", icon: "✅" }
+      ].map((step, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `flex items-center justify-center w-10 h-10 rounded-full border-2 ${currentStep === step.key ? "bg-red-500 border-red-500 text-white" : ["pasta", "sauce", "ingredients", "review"].indexOf(currentStep) > index ? "bg-green-500 border-green-500 text-white" : "border-gray-300 text-gray-500"}`, children: ["pasta", "sauce", "ingredients", "review"].indexOf(currentStep) > index ? /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-5 h-5" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-bold", children: index + 1 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `ml-2 text-sm font-medium ${currentStep === step.key ? "text-red-500" : "text-gray-500"}`, children: step.label }),
+        index < 3 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-0.5 bg-gray-300 mx-4" })
+      ] }, step.key)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+      currentStep === "pasta" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Escolha seu tipo de massa" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: pastaTypes == null ? void 0 : pastaTypes.map((pasta) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Card,
+          {
+            className: `cursor-pointer transition-all duration-200 ${(selectedPasta == null ? void 0 : selectedPasta.id) === pasta.id ? "ring-2 ring-red-500 bg-red-50" : "hover:shadow-lg"}`,
+            onClick: () => setSelectedPasta(pasta),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-lg", children: pasta.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-600", children: pasta.description })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xl font-bold text-red-500", children: [
+                  "R$ ",
+                  pasta.price.toFixed(2)
+                ] }),
+                (selectedPasta == null ? void 0 : selectedPasta.id) === pasta.id && /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-5 h-5 text-red-500" })
+              ] }) })
+            ]
+          },
+          pasta.id
+        )) })
+      ] }),
+      currentStep === "sauce" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Escolha seu molho" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: sauces == null ? void 0 : sauces.map((sauce) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Card,
+          {
+            className: `cursor-pointer transition-all duration-200 ${(selectedSauce == null ? void 0 : selectedSauce.id) === sauce.id ? "ring-2 ring-red-500 bg-red-50" : "hover:shadow-lg"}`,
+            onClick: () => setSelectedSauce(sauce),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-lg", children: sauce.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-600", children: sauce.description })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xl font-bold text-red-500", children: [
+                  "R$ ",
+                  sauce.price.toFixed(2)
+                ] }),
+                (selectedSauce == null ? void 0 : selectedSauce.id) === sauce.id && /* @__PURE__ */ jsxRuntimeExports.jsx(Check, { className: "w-5 h-5 text-red-500" })
+              ] }) })
+            ]
+          },
+          sauce.id
+        )) })
+      ] }),
+      currentStep === "ingredients" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Adicionar ingredientes (opcional)" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Proteínas" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3", children: ingredients == null ? void 0 : ingredients.filter((ing) => ing.category === "protein").map((ingredient) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Card,
+            {
+              className: `cursor-pointer transition-all duration-200 ${selectedIngredients.find((ing) => ing.id === ingredient.id) ? "ring-2 ring-red-500 bg-red-50" : "hover:shadow-lg"}`,
+              onClick: () => handleIngredientToggle(ingredient),
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "font-medium text-sm mb-2", children: ingredient.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-red-500 font-bold", children: [
+                  "R$ ",
+                  ingredient.price.toFixed(2)
+                ] }),
+                ingredient.popular && /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mt-2 text-xs", children: "Popular" })
+              ] }) })
+            },
+            ingredient.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Vegetais" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3", children: ingredients == null ? void 0 : ingredients.filter((ing) => ing.category === "vegetable").map((ingredient) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Card,
+            {
+              className: `cursor-pointer transition-all duration-200 ${selectedIngredients.find((ing) => ing.id === ingredient.id) ? "ring-2 ring-red-500 bg-red-50" : "hover:shadow-lg"}`,
+              onClick: () => handleIngredientToggle(ingredient),
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "font-medium text-sm mb-2", children: ingredient.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-red-500 font-bold", children: [
+                  "R$ ",
+                  ingredient.price.toFixed(2)
+                ] }),
+                ingredient.popular && /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mt-2 text-xs", children: "Popular" })
+              ] }) })
+            },
+            ingredient.id
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Queijos" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3", children: ingredients == null ? void 0 : ingredients.filter((ing) => ing.category === "cheese").map((ingredient) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Card,
+            {
+              className: `cursor-pointer transition-all duration-200 ${selectedIngredients.find((ing) => ing.id === ingredient.id) ? "ring-2 ring-red-500 bg-red-50" : "hover:shadow-lg"}`,
+              onClick: () => handleIngredientToggle(ingredient),
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "font-medium text-sm mb-2", children: ingredient.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-red-500 font-bold", children: [
+                  "R$ ",
+                  ingredient.price.toFixed(2)
+                ] }),
+                ingredient.popular && /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "mt-2 text-xs", children: "Popular" })
+              ] }) })
+            },
+            ingredient.id
+          )) })
+        ] })
+      ] }),
+      currentStep === "review" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Revisar seu pedido" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-xl", children: "Sua Massa Personalizada" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "space-y-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: selectedPasta == null ? void 0 : selectedPasta.name }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-500 font-bold", children: [
+                "R$ ",
+                selectedPasta == null ? void 0 : selectedPasta.price.toFixed(2)
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-medium", children: [
+                "Molho ",
+                selectedSauce == null ? void 0 : selectedSauce.name
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-500 font-bold", children: [
+                "R$ ",
+                selectedSauce == null ? void 0 : selectedSauce.price.toFixed(2)
+              ] })
+            ] }),
+            selectedIngredients.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "font-medium mb-2", children: "Ingredientes adicionais:" }),
+              selectedIngredients.map((ingredient) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center ml-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm", children: ingredient.name }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-sm text-red-500", children: [
+                  "R$ ",
+                  ingredient.price.toFixed(2)
+                ] })
+              ] }, ingredient.id))
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t pt-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: "Quantidade:" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      variant: "outline",
+                      size: "sm",
+                      onClick: () => setQuantity(Math.max(1, quantity - 1)),
+                      disabled: quantity <= 1,
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Minus, { className: "w-4 h-4" })
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-8 text-center", children: quantity }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      variant: "outline",
+                      size: "sm",
+                      onClick: () => setQuantity(quantity + 1),
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-4 h-4" })
+                    }
+                  )
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center text-xl font-bold", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Total:" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-500", children: [
+                  "R$ ",
+                  getTotalPrice().toFixed(2)
+                ] })
+              ] })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        Button,
+        {
+          variant: "outline",
+          onClick: currentStep === "pasta" ? onClose : handleBack,
+          className: "flex items-center",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { className: "w-4 h-4 mr-2" }),
+            currentStep === "pasta" ? "Cancelar" : "Voltar"
+          ]
+        }
+      ),
+      currentStep !== "review" ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        Button,
+        {
+          onClick: handleNext,
+          disabled: !canProceed(),
+          className: "flex items-center bg-red-500 hover:bg-red-600",
+          children: [
+            "Continuar",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4 ml-2" })
+          ]
+        }
+      ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        Button,
+        {
+          onClick: handleAddToCart,
+          className: "flex items-center bg-green-500 hover:bg-green-600",
+          children: [
+            "Adicionar ao Carrinho",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-4 h-4 ml-2" })
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+function DeliveryMenuPage() {
+  const [isCartOpen, setIsCartOpen] = reactExports.useState(false);
+  const [isMonteSeuMacarraoOpen, setIsMonteSeuMacarraoOpen] = reactExports.useState(false);
+  const [searchTerm, setSearchTerm] = reactExports.useState("");
+  const [selectedCategory, setSelectedCategory] = reactExports.useState("all");
+  const { addToCart } = useCart();
+  const { data: pastaTypes, isLoading: pastaLoading } = useQuery({
+    queryKey: ["pasta-types"],
+    queryFn: () => backend.pastaTypes.list()
+  });
+  const { data: sauces, isLoading: saucesLoading } = useQuery({
+    queryKey: ["sauces"],
+    queryFn: () => backend.sauces.list()
+  });
+  const { data: ingredients, isLoading: ingredientsLoading } = useQuery({
+    queryKey: ["ingredients"],
+    queryFn: () => backend.ingredients.list()
+  });
+  const categories = [
+    { id: "all", name: "Todos", icon: "🍝" },
+    { id: "classic", name: "Clássicas", icon: "⭐" },
+    { id: "premium", name: "Premium", icon: "👑" },
+    { id: "vegetarian", name: "Especiais", icon: "🥬" }
+  ];
+  const filteredPastaTypes = pastaTypes == null ? void 0 : pastaTypes.filter((pasta) => {
+    const matchesSearch = pasta.name.toLowerCase().includes(searchTerm.toLowerCase()) || pasta.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || pasta.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+  const handleAddToCart = (pastaType, sauce, selectedIngredients) => {
+    addToCart({
+      pasta_type: pastaType,
+      sauce,
       ingredients: selectedIngredients,
       quantity: 1
     });
-    toast2({
-      title: "Adicionado ao carrinho!",
-      description: `${selectedPasta.name} com molho ${selectedSauce.name}`
-    });
-    setStep(1);
-    setSelectedPasta(null);
-    setSelectedSauce(null);
-    setSelectedIngredients([]);
   };
-  const totalPrice = ((selectedPasta == null ? void 0 : selectedPasta.price) || 0) + ((selectedSauce == null ? void 0 : selectedSauce.price) || 0) + selectedIngredients.reduce((sum, ing) => sum + ing.price, 0);
-  const steps = [
-    { number: 1, title: "Escolher Massa", completed: !!selectedPasta },
-    { number: 2, title: "Escolher Molho", completed: !!selectedSauce },
-    { number: 3, title: "Adicionar Ingredientes", completed: step >= 3 }
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "w-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-4 sm:pb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-lg sm:text-xl lg:text-2xl text-center", children: "Monte Sua Massa Perfeita" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-between items-center mt-4 sm:mt-6", children: steps.map((stepItem, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(React.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              className: `w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${step >= stepItem.number ? "bg-orange-500 text-white" : stepItem.completed ? "bg-green-500 text-white" : "bg-gray-200 text-gray-500"}`,
-              children: stepItem.number
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-xs sm:text-sm mt-1 text-center px-1 ${step >= stepItem.number ? "text-orange-500 font-medium" : "text-gray-500"}`, children: stepItem.title })
-        ] }),
-        index < steps.length - 1 && /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-3 h-3 sm:w-4 sm:h-4 text-gray-400" })
-      ] }, stepItem.number)) })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { children: [
-      step === 1 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-base sm:text-lg font-semibold", children: "Escolha seu tipo de massa" }),
-        loadingPasta ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4", children: [...Array(6)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-24 sm:h-28 lg:h-32 bg-gray-200 animate-pulse rounded-lg" }, i)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4", children: pastaTypes == null ? void 0 : pastaTypes.pasta_types.map((pasta) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: `p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg ${(selectedPasta == null ? void 0 : selectedPasta.id) === pasta.id ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200" : "border-gray-200 hover:border-orange-300"}`,
-            onClick: () => setSelectedPasta(pasta),
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold text-sm sm:text-base lg:text-lg", children: pasta.name }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs sm:text-sm text-gray-600 mt-1", children: pasta.description }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-orange-500 font-bold mt-2 text-sm sm:text-base", children: [
-                "R$ ",
-                pasta.price.toFixed(2)
-              ] })
-            ] })
-          },
-          pasta.id
-        )) }),
-        selectedPasta && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end mt-4 sm:mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: () => setStep(2), className: "bg-orange-500 hover:bg-orange-600 text-sm sm:text-base px-4 sm:px-6", children: "Próximo: Escolher Molho" }) })
-      ] }),
-      step === 2 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold", children: "Escolha seu molho" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "outline", onClick: () => setStep(1), children: "Voltar" })
-        ] }),
-        loadingSauces ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [...Array(6)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-32 bg-gray-200 animate-pulse rounded-lg" }, i)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: sauces == null ? void 0 : sauces.sauces.map((sauce) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: `p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg ${(selectedSauce == null ? void 0 : selectedSauce.id) === sauce.id ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200" : "border-gray-200 hover:border-orange-300"}`,
-            onClick: () => setSelectedSauce(sauce),
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold text-lg", children: sauce.name }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-600 mt-1", children: sauce.description }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-orange-500 font-bold mt-2", children: [
-                "R$ ",
-                sauce.price.toFixed(2)
-              ] })
-            ] })
-          },
-          sauce.id
-        )) }),
-        selectedSauce && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: () => setStep(3), className: "bg-orange-500 hover:bg-orange-600", children: "Próximo: Adicionar Ingredientes" }) })
-      ] }),
-      step === 3 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-lg font-semibold", children: "Adicionar ingredientes (opcional)" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { variant: "outline", onClick: () => setStep(2), children: "Voltar" })
-        ] }),
-        loadingIngredients ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4", children: [...Array(12)].map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-24 bg-gray-200 animate-pulse rounded-lg" }, i)) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: ["protein", "vegetable", "cheese"].map((category) => {
-          const categoryIngredients = (ingredients == null ? void 0 : ingredients.ingredients.filter((ing) => ing.category === category)) || [];
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "font-medium text-gray-700 mb-3 capitalize", children: [
-              category === "protein" ? "Proteínas" : category === "vegetable" ? "Vegetais" : category === "cheese" ? "Queijos" : category,
-              "s"
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3", children: categoryIngredients.map((ingredient) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "div",
-              {
-                className: `p-3 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-md ${selectedIngredients.some((i) => i.id === ingredient.id) ? "border-orange-500 bg-orange-50 ring-1 ring-orange-200" : "border-gray-200 hover:border-orange-300"}`,
-                onClick: () => handleIngredientToggle(ingredient),
-                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${selectedIngredients.some((i) => i.id === ingredient.id) ? "bg-orange-500 text-white" : "bg-gray-200 text-gray-500"}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-4 h-4" }) }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "font-medium text-sm", children: ingredient.name }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-orange-500 font-bold text-sm", children: [
-                    "R$ ",
-                    ingredient.price.toFixed(2)
-                  ] })
-                ] })
-              },
-              ingredient.id
-            )) })
-          ] }, category);
-        }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t pt-6 mt-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center mb-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold text-lg", children: "Sua Massa" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-gray-600", children: [
-              selectedPasta == null ? void 0 : selectedPasta.name,
-              " com ",
-              selectedSauce == null ? void 0 : selectedSauce.name,
-              selectedIngredients.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-                " + ",
-                selectedIngredients.length,
-                " ingrediente",
-                selectedIngredients.length !== 1 ? "s" : ""
-              ] })
-            ] })
+  if (pastaLoading || saucesLoading || ingredientsLoading) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen bg-gray-50 flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Carregando cardápio..." })
+    ] }) });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-gray-50", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-white shadow-sm border-b sticky top-0 z-40", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-5 h-5 text-red-500" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-gray-700", children: "Entregar em" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-semibold text-gray-900", children: "São Paulo, SP" })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-right", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-2xl font-bold text-orange-500", children: [
-              "R$ ",
-              totalPrice.toFixed(2)
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: addToCart, className: "mt-2 bg-orange-500 hover:bg-orange-600", children: "Adicionar ao Carrinho" })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-5 h-5 text-green-500" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-gray-700", children: "25-30 min" })
           ] })
-        ] }) })
-      ] })
-    ] })
-  ] });
-}
-var COLLAPSIBLE_NAME = "Collapsible";
-var [createCollapsibleContext] = createContextScope(COLLAPSIBLE_NAME);
-var [CollapsibleProvider, useCollapsibleContext] = createCollapsibleContext(COLLAPSIBLE_NAME);
-var Collapsible$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const {
-      __scopeCollapsible,
-      open: openProp,
-      defaultOpen,
-      disabled,
-      onOpenChange,
-      ...collapsibleProps
-    } = props;
-    const [open, setOpen] = useControllableState({
-      prop: openProp,
-      defaultProp: defaultOpen ?? false,
-      onChange: onOpenChange,
-      caller: COLLAPSIBLE_NAME
-    });
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CollapsibleProvider,
-      {
-        scope: __scopeCollapsible,
-        disabled,
-        contentId: useId(),
-        open,
-        onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Primitive.div,
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { variant: "ghost", size: "sm", className: "text-red-500", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Heart, { className: "w-4 h-4 mr-1" }),
+            "Favoritos"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              variant: "outline",
+              size: "sm",
+              onClick: () => setIsCartOpen(true),
+              className: "bg-red-500 text-white hover:bg-red-600 border-red-500",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-4 h-4 mr-1" }),
+                "Ver Carrinho"
+              ]
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Search, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Input,
           {
-            "data-state": getState(open),
-            "data-disabled": disabled ? "" : void 0,
-            ...collapsibleProps,
-            ref: forwardedRef
+            type: "text",
+            placeholder: "Buscar massas, molhos ou ingredientes...",
+            value: searchTerm,
+            onChange: (e) => setSearchTerm(e.target.value),
+            className: "pl-10 pr-4 py-3 text-base border-gray-300 focus:border-red-500 focus:ring-red-500"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Button,
+          {
+            variant: "outline",
+            size: "sm",
+            className: "absolute right-2 top-1/2 transform -translate-y-1/2",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(Funnel, { className: "w-4 h-4" })
           }
         )
-      }
-    );
-  }
-);
-Collapsible$1.displayName = COLLAPSIBLE_NAME;
-var TRIGGER_NAME = "CollapsibleTrigger";
-var CollapsibleTrigger$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeCollapsible, ...triggerProps } = props;
-    const context = useCollapsibleContext(TRIGGER_NAME, __scopeCollapsible);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive.button,
-      {
-        type: "button",
-        "aria-controls": context.contentId,
-        "aria-expanded": context.open || false,
-        "data-state": getState(context.open),
-        "data-disabled": context.disabled ? "" : void 0,
-        disabled: context.disabled,
-        ...triggerProps,
-        ref: forwardedRef,
-        onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
-      }
-    );
-  }
-);
-CollapsibleTrigger$1.displayName = TRIGGER_NAME;
-var CONTENT_NAME = "CollapsibleContent";
-var CollapsibleContent$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { forceMount, ...contentProps } = props;
-    const context = useCollapsibleContext(CONTENT_NAME, props.__scopeCollapsible);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: ({ present }) => /* @__PURE__ */ jsxRuntimeExports.jsx(CollapsibleContentImpl, { ...contentProps, ref: forwardedRef, present }) });
-  }
-);
-CollapsibleContent$1.displayName = CONTENT_NAME;
-var CollapsibleContentImpl = reactExports.forwardRef((props, forwardedRef) => {
-  const { __scopeCollapsible, present, children, ...contentProps } = props;
-  const context = useCollapsibleContext(CONTENT_NAME, __scopeCollapsible);
-  const [isPresent, setIsPresent] = reactExports.useState(present);
-  const ref = reactExports.useRef(null);
-  const composedRefs = useComposedRefs(forwardedRef, ref);
-  const heightRef = reactExports.useRef(0);
-  const height = heightRef.current;
-  const widthRef = reactExports.useRef(0);
-  const width = widthRef.current;
-  const isOpen = context.open || isPresent;
-  const isMountAnimationPreventedRef = reactExports.useRef(isOpen);
-  const originalStylesRef = reactExports.useRef(void 0);
-  reactExports.useEffect(() => {
-    const rAF = requestAnimationFrame(() => isMountAnimationPreventedRef.current = false);
-    return () => cancelAnimationFrame(rAF);
-  }, []);
-  useLayoutEffect2(() => {
-    const node = ref.current;
-    if (node) {
-      originalStylesRef.current = originalStylesRef.current || {
-        transitionDuration: node.style.transitionDuration,
-        animationName: node.style.animationName
-      };
-      node.style.transitionDuration = "0s";
-      node.style.animationName = "none";
-      const rect = node.getBoundingClientRect();
-      heightRef.current = rect.height;
-      widthRef.current = rect.width;
-      if (!isMountAnimationPreventedRef.current) {
-        node.style.transitionDuration = originalStylesRef.current.transitionDuration;
-        node.style.animationName = originalStylesRef.current.animationName;
-      }
-      setIsPresent(present);
-    }
-  }, [context.open, present]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    Primitive.div,
-    {
-      "data-state": getState(context.open),
-      "data-disabled": context.disabled ? "" : void 0,
-      id: context.contentId,
-      hidden: !isOpen,
-      ...contentProps,
-      ref: composedRefs,
-      style: {
-        [`--radix-collapsible-content-height`]: height ? `${height}px` : void 0,
-        [`--radix-collapsible-content-width`]: width ? `${width}px` : void 0,
-        ...props.style
-      },
-      children: isOpen && children
-    }
-  );
-});
-function getState(open) {
-  return open ? "open" : "closed";
-}
-var Root = Collapsible$1;
-function Collapsible({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Root, { "data-slot": "collapsible", ...props });
-}
-function CollapsibleTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    CollapsibleTrigger$1,
-    {
-      "data-slot": "collapsible-trigger",
-      ...props
-    }
-  );
-}
-function CollapsibleContent({
-  ...props
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    CollapsibleContent$1,
-    {
-      "data-slot": "collapsible-content",
-      ...props
-    }
-  );
-}
-function MenuCategories() {
-  const [openCategories, setOpenCategories] = reactExports.useState(["pasta"]);
-  const { addItem } = useCart();
-  const { toast: toast2 } = useToast();
-  const { data: pastaTypes } = useQuery({
-    queryKey: ["pasta-types"],
-    queryFn: () => backend.menu.listPastaTypes()
-  });
-  const { data: sauces } = useQuery({
-    queryKey: ["sauces"],
-    queryFn: () => backend.menu.listSauces()
-  });
-  const { data: ingredients } = useQuery({
-    queryKey: ["ingredients"],
-    queryFn: () => backend.menu.listIngredients({})
-  });
-  const toggleCategory = (category) => {
-    setOpenCategories(
-      (prev) => prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
-  };
-  const addQuickOrder = (pasta, sauce) => {
-    addItem({
-      pasta_type: pasta,
-      sauce,
-      ingredients: [],
-      quantity: 1
-    });
-    toast2({
-      title: "Adicionado ao carrinho!",
-      description: `${pasta.name} com molho ${sauce.name}`
-    });
-  };
-  const categories = [
-    {
-      id: "pasta",
-      title: "Tipos de Massa",
-      items: (pastaTypes == null ? void 0 : pastaTypes.pasta_types) || [],
-      type: "pasta"
-    },
-    {
-      id: "sauces",
-      title: "Molhos",
-      items: (sauces == null ? void 0 : sauces.sauces) || [],
-      type: "sauce"
-    },
-    {
-      id: "proteins",
-      title: "Proteínas",
-      items: (ingredients == null ? void 0 : ingredients.ingredients.filter((i) => i.category === "protein")) || [],
-      type: "ingredient"
-    },
-    {
-      id: "vegetables",
-      title: "Vegetais",
-      items: (ingredients == null ? void 0 : ingredients.ingredients.filter((i) => i.category === "vegetable")) || [],
-      type: "ingredient"
-    },
-    {
-      id: "cheese",
-      title: "Queijos",
-      items: (ingredients == null ? void 0 : ingredients.ingredients.filter((i) => i.category === "cheese")) || [],
-      type: "ingredient"
-    }
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold text-gray-800 text-center", children: "Nosso Cardápio" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: categories.map((category) => /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      Collapsible,
-      {
-        open: openCategories.includes(category.id),
-        onOpenChange: () => toggleCategory(category.id),
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CollapsibleTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "cursor-pointer hover:bg-gray-50 transition-colors duration-200", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "flex items-center justify-between", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: category.title }),
-            openCategories.includes(category.id) ? /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "w-5 h-5" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronDown, { className: "w-5 h-5" })
-          ] }) }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(CollapsibleContent, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4", children: category.items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold", children: item.name }),
-              item.description && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-600 mt-1", children: item.description }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-orange-500 font-bold mt-2", children: [
-                "R$ ",
-                item.price.toFixed(2)
-              ] })
-            ] }),
-            category.type === "pasta" && (sauces == null ? void 0 : sauces.sauces) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "ml-4 space-y-2", children: sauces.sauces.slice(0, 2).map((sauce) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              Button,
-              {
-                size: "sm",
-                variant: "outline",
-                onClick: () => addQuickOrder(item, sauce),
-                className: "text-xs",
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3 h-3 mr-1" }),
-                  "+ ",
-                  sauce.name
-                ]
-              },
-              sauce.id
-            )) })
-          ] }, item.id)) }) }) })
-        ]
-      }
-    ) }, category.id)) })
-  ] });
-}
-function CartSummary() {
-  const [isCheckoutOpen, setIsCheckoutOpen] = reactExports.useState(false);
-  const [customerInfo, setCustomerInfo] = reactExports.useState({
-    name: "",
-    email: "",
-    phone: ""
-  });
-  const { items, removeItem, updateQuantity, clearCart } = useCart();
-  const { toast: toast2 } = useToast();
-  const navigate = useNavigate();
-  const totalPrice = items.reduce((sum, item) => {
-    const itemPrice = item.pasta_type.price + item.sauce.price + item.ingredients.reduce((ingredientSum, ing) => ingredientSum + ing.price, 0);
-    return sum + itemPrice * item.quantity;
-  }, 0);
-  const createOrderMutation = useMutation({
-    mutationFn: (orderData) => backend.orders.createOrder(orderData),
-    onSuccess: (order) => {
-      clearCart();
-      setIsCheckoutOpen(false);
-      setCustomerInfo({ name: "", email: "", phone: "" });
-      navigate(`/order/${order.id}`);
-      toast2({
-        title: "Pedido realizado com sucesso!",
-        description: `Pedido #${order.id} foi criado.`
-      });
-    },
-    onError: (error) => {
-      console.error("Order creation failed:", error);
-      toast2({
-        title: "Erro",
-        description: "Falha ao realizar o pedido. Tente novamente.",
-        variant: "destructive"
-      });
-    }
-  });
-  const handleCheckout = (e) => {
-    e.preventDefault();
-    if (!customerInfo.name.trim()) {
-      toast2({
-        title: "Erro",
-        description: "Por favor, digite seu nome.",
-        variant: "destructive"
-      });
-      return;
-    }
-    const orderData = {
-      customer_name: customerInfo.name,
-      customer_email: customerInfo.email || void 0,
-      customer_phone: customerInfo.phone || void 0,
-      items: items.map((item) => ({
-        pasta_type_id: item.pasta_type.id,
-        sauce_id: item.sauce.id,
-        ingredient_ids: item.ingredients.map((ing) => ing.id),
-        quantity: item.quantity
-      }))
-    };
-    createOrderMutation.mutate(orderData);
-  };
-  if (items.length === 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-3 sm:pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "flex items-center text-sm sm:text-base", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-4 h-4 sm:w-5 sm:h-5 mr-2" }),
-        "Seu Carrinho"
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-6 sm:py-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-300 mb-3 sm:mb-4" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-500 text-sm sm:text-base", children: "Seu carrinho está vazio" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs sm:text-sm text-gray-400 mt-2", children: "Comece a montar sua massa perfeita!" })
-      ] }) })
-    ] });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "pb-3 sm:pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "flex items-center justify-between text-sm sm:text-base", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ShoppingCart, { className: "w-4 h-4 sm:w-5 sm:h-5 mr-2" }),
-        "Seu Carrinho"
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs sm:text-sm font-normal text-gray-500", children: [
-        items.reduce((sum, item) => sum + item.quantity, 0),
-        " itens"
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(CardContent, { className: "pt-0", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-3 sm:space-y-4", children: items.map((item, index) => {
-        const itemPrice = item.pasta_type.price + item.sauce.price + item.ingredients.reduce((sum, ing) => sum + ing.price, 0);
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-start", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 pr-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold text-sm sm:text-base", children: item.pasta_type.name }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs sm:text-sm text-gray-600", children: [
-                "com molho ",
-                item.sauce.name
-              ] }),
-              item.ingredients.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-gray-500 mb-1", children: "Ingredientes:" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-1", children: item.ingredients.map((ing, ingIndex) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "span",
-                  {
-                    className: "px-1.5 py-0.5 sm:px-2 sm:py-1 bg-orange-100 text-orange-700 text-xs rounded-full",
-                    children: ing.name
-                  },
-                  ingIndex
-                )) })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Button,
-              {
-                variant: "ghost",
-                size: "sm",
-                onClick: () => removeItem(index),
-                className: "text-red-500 hover:text-red-700 hover:bg-red-50 p-1 sm:p-2",
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { className: "w-3 h-3 sm:w-4 sm:h-4" })
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1 sm:space-x-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Button,
-                {
-                  variant: "outline",
-                  size: "sm",
-                  onClick: () => updateQuantity(index, Math.max(1, item.quantity - 1)),
-                  disabled: item.quantity <= 1,
-                  className: "p-1 sm:p-2",
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Minus, { className: "w-3 h-3" })
-                }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-6 sm:w-8 text-center text-sm sm:text-base", children: item.quantity }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Button,
-                {
-                  variant: "outline",
-                  size: "sm",
-                  onClick: () => updateQuantity(index, item.quantity + 1),
-                  className: "p-1 sm:p-2",
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-3 h-3" })
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-bold text-sm sm:text-base", children: [
-              "R$ ",
-              (itemPrice * item.quantity).toFixed(2)
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-4 py-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-12", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl lg:text-5xl font-bold text-gray-900 mb-4", children: "Cardápio Fetuccine" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg text-gray-600 mb-6 max-w-2xl mx-auto", children: "Massas italianas autênticas entregues na sua casa. Monte sua combinação perfeita e receba em até 30 minutos." }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: () => setIsMonteSeuMacarraoOpen(true),
+            className: "bg-red-500 hover:bg-red-600 text-white text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-8",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ChefHat, { className: "w-6 h-6 mr-3" }),
+              "Monte seu Macarrão Personalizado"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap justify-center gap-2 mb-8", children: categories.map((category) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            variant: selectedCategory === category.id ? "default" : "outline",
+            size: "sm",
+            onClick: () => setSelectedCategory(category.id),
+            className: `${selectedCategory === category.id ? "bg-red-500 text-white hover:bg-red-600" : "bg-white text-gray-700 hover:bg-red-50 border-gray-300"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mr-2", children: category.icon }),
+              category.name
+            ]
+          },
+          category.id
+        )) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: filteredPastaTypes == null ? void 0 : filteredPastaTypes.map((pastaType) => /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "bg-white shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center relative", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-6xl", children: "🍝" }),
+          pastaType.popular && /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { className: "absolute top-3 left-3 bg-red-500 text-white", children: "Popular" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              variant: "ghost",
+              size: "sm",
+              className: "absolute top-3 right-3 bg-white/20 hover:bg-white/30 text-white",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(Heart, { className: "w-4 h-4" })
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(CardHeader, { className: "pb-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-xl font-bold text-gray-900", children: pastaType.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center space-x-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Star, { className: "w-4 h-4 text-yellow-400 fill-current" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm font-medium text-gray-600", children: "4.8" })
             ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600 text-sm mb-3", children: pastaType.description }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-2xl font-bold text-red-500", children: [
+              "R$ ",
+              pastaType.price.toFixed(2)
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: "secondary", className: "bg-gray-100 text-gray-700", children: pastaType.category === "premium" ? "Premium" : pastaType.category === "vegetarian" ? "Especial" : "Clássica" })
           ] })
-        ] }, index);
-      }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t pt-3 sm:pt-4 mt-4 sm:mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center text-lg sm:text-xl font-bold", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Total:" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-orange-500", children: [
-          "R$ ",
-          totalPrice.toFixed(2)
-        ] })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(Dialog, { open: isCheckoutOpen, onOpenChange: setIsCheckoutOpen, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTrigger, { asChild: true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { className: "w-full mt-3 sm:mt-4 bg-orange-500 hover:bg-orange-600 text-sm sm:text-base py-2 sm:py-3", children: "Finalizar Pedido" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Complete Seu Pedido" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleCheckout, className: "space-y-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "name", children: "Nome *" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "name",
-                  value: customerInfo.name,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, name: e.target.value })),
-                  placeholder: "Digite seu nome",
-                  required: true
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "email", children: "Email" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "email",
-                  type: "email",
-                  value: customerInfo.email,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, email: e.target.value })),
-                  placeholder: "Digite seu email (opcional)"
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Label, { htmlFor: "phone", children: "Telefone" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                Input,
-                {
-                  id: "phone",
-                  type: "tel",
-                  value: customerInfo.phone,
-                  onChange: (e) => setCustomerInfo((prev) => ({ ...prev, phone: e.target.value })),
-                  placeholder: "Digite seu telefone (opcional)"
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center text-lg font-bold", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Total:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-orange-500", children: [
-                "R$ ",
-                totalPrice.toFixed(2)
-              ] })
-            ] }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "pt-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "font-semibold text-gray-900 mb-2", children: "Molhos Populares:" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-2", children: sauces == null ? void 0 : sauces.filter((sauce) => sauce.popular).slice(0, 4).map((sauce) => /* @__PURE__ */ jsxRuntimeExports.jsx(
               Button,
               {
-                type: "submit",
-                className: "w-full bg-orange-500 hover:bg-orange-600",
-                disabled: createOrderMutation.isPending,
-                children: createOrderMutation.isPending ? "Realizando Pedido..." : "Realizar Pedido"
-              }
-            )
+                variant: "outline",
+                size: "sm",
+                className: "text-xs justify-start hover:bg-red-50 hover:border-red-300",
+                onClick: () => handleAddToCart(pastaType, sauce, []),
+                children: sauce.name
+              },
+              sauce.id
+            )) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs text-gray-500 mt-1", children: [
+              "+ ",
+              (sauces == null ? void 0 : sauces.length) - 4,
+              " outros molhos"
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              className: "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3",
+              onClick: () => {
+                const defaultSauce = (sauces == null ? void 0 : sauces.find((s) => s.popular)) || (sauces == null ? void 0 : sauces[0]);
+                if (defaultSauce) {
+                  handleAddToCart(pastaType, defaultSauce, []);
+                }
+              },
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { className: "w-4 h-4 mr-2" }),
+                "Adicionar ao Carrinho"
+              ]
+            }
+          )
+        ] }) })
+      ] }, pastaType.id)) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-8 text-white", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold mb-4", children: "Nosso Cardápio Completo" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-red-100 text-lg", children: "Variedade e qualidade em cada prato" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-6 text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl font-bold mb-2", children: (pastaTypes == null ? void 0 : pastaTypes.length) || 0 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-red-100", children: "Tipos de Massa" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl font-bold mb-2", children: (sauces == null ? void 0 : sauces.length) || 0 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-red-100", children: "Molhos Artesanais" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl font-bold mb-2", children: (ingredients == null ? void 0 : ingredients.length) || 0 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-red-100", children: "Ingredientes Frescos" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl font-bold mb-2", children: "1000+" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-red-100", children: "Combinações Possíveis" })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-16 bg-white rounded-2xl p-8 shadow-lg border border-gray-200", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-3xl font-bold text-gray-900 mb-4", children: "Informações de Delivery" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg text-gray-600", children: "Tudo que você precisa saber sobre nossa entrega" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Clock, { className: "w-8 h-8 text-red-500" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-semibold text-gray-900 mb-2", children: "Tempo de Entrega" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "25-30 minutos em média. Pedidos preparados na hora com ingredientes frescos." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { className: "w-8 h-8 text-red-500" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-semibold text-gray-900 mb-2", children: "Área de Cobertura" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Entregamos em toda a região metropolitana. Verifique sua localização no checkout." })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Truck, { className: "w-8 h-8 text-red-500" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-semibold text-gray-900 mb-2", children: "Taxa de Entrega" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Delivery grátis para pedidos acima de R$ 30. Taxa de R$ 5 para pedidos menores." })
           ] })
         ] })
       ] })
-    ] })
-  ] });
-}
-function ErrorFallback({ error }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center py-12", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-bold text-red-600 mb-4", children: "Algo deu errado" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: error.message })
-  ] });
-}
-function LoadingSpinner() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-center py-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500" }) });
-}
-function MenuPage() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-8 sm:mb-10 lg:mb-12", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-800 mb-3 sm:mb-4", children: [
-        "Bem-vindo ao ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500", children: "Fetuccine" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl mx-auto px-4", children: "Crie seu prato de massa perfeito com nosso construtor interativo. Escolha sua massa, molho e ingredientes para uma refeição feita especialmente para você." })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "xl:col-span-2 order-2 xl:order-1", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { FallbackComponent: ErrorFallback, children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(PastaBuilder, {}) }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-8 sm:mt-10 lg:mt-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { FallbackComponent: ErrorFallback, children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuCategories, {}) }) }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "xl:col-span-1 order-1 xl:order-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sticky top-20 sm:top-24", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartSummary, {}) }) })
-    ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: isMonteSeuMacarraoOpen, onOpenChange: setIsMonteSeuMacarraoOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-6xl max-h-[90vh] overflow-y-auto", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { className: "text-2xl font-bold text-center", children: "Monte seu Macarrão" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(MonteSeuMacarrao, { onClose: () => setIsMonteSeuMacarraoOpen(false) })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(CartModal, { isOpen: isCartOpen, onClose: () => setIsCartOpen(false) })
   ] });
 }
 const statusIcons = {
@@ -25597,7 +25600,8 @@ const queryClient = new QueryClient({
 function App() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-gradient-to-br from-orange-50 to-red-50 dark", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(MenuPage, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(HomePage, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/menu", element: /* @__PURE__ */ jsxRuntimeExports.jsx(DeliveryMenuPage, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/order/:id", element: /* @__PURE__ */ jsxRuntimeExports.jsx(OrderPage, {}) })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, {})
